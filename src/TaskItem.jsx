@@ -1,8 +1,10 @@
-function TaskItem({task, onToggle, onDelete}){
+function TaskItem({task, onToggle, onDelete,abrirModal,colorTexto}){
     return(
-        <li style={{textDecoration: task.completed ? 'line-through' : none}}>
-            <button onClick={onToggle}>✔</button>
-            <button onClick={onDelete}>❌</button>
+        <li onClick={abrirModal}
+             style={{color:colorTexto,cursor:'pointer',textDecoration: task.completed ? 'line-through' : 'none'}}>
+             {task.text}
+            <button onClick={(e)=>{e.stopPropagation(); onToggle()}}>✔</button>
+            <button onClick={(e)=>{e.stopPropagation();onDelete()}}>❌</button>
         </li>
     )
 }
