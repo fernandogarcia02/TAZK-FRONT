@@ -12,7 +12,7 @@ function TaskList({items, onToggle, onDelete,abrirModal,colorTexto}) {
                 onToggle={()=>onToggle(item.id)}
                 onDelete={()=>onDelete(item.id)}
                 abrirModal={()=>abrirModal(item.id)}
-                colorTexto={colorTexto(item)}
+                colorTexto={colorTexto(item.priority)}
                 />);
             })}
         </ul>
