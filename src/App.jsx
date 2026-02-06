@@ -2,15 +2,11 @@ import { useState } from 'react';
 import './App.css';
 import TaskList from './TaskList';
 import TaskForm from './TaskForm';
-import useTasks from './hooks/useTasks';
+import TaskModal from './TaskModal';
+import useTasksContext from './hooks/useTasksContext';
+
 
 function App() {
-  // Estado solo de inputs y modales
-
-  const [modalAbierto, setModalAbierto] = useState(false);
-  const [taskActual, setTaskActual] = useState(null);
-  const [nuevoTexto, setNuevoTexto] = useState('');
-  const [nuevaDesc, setNuevaDesc] = useState('');
 
   // Hook
   const {
@@ -30,31 +26,23 @@ function App() {
     description,
     setDescription,
     obtenerColor,
-  } = useTasks();
+    abrirModal,
+    guardarCambios,
+    modalAbierto,
+    setModalAbierto,
+    nuevoTexto,
+    setNuevoTexto,
+    nuevaDesc,
+    setNuevaDesc
+  } = useTasksContext();
 
-  const abrirModal = (task) => {
-    setTaskActual(task);
-    setNuevoTexto(task.text);
-    setNuevaDesc(task.description);
-    setModalAbierto(true);
-  };
+ 
 
-  const guardarCambios = () => {
-    editarItem(taskActual.id, nuevoTexto, nuevaDesc);
-    setModalAbierto(false);
-  };
 
   return (
-    <div>
-      <TaskForm 
-        text={text}
-        description={description}
-        setText={setText}
-        setDescription={setDescription}
-        prioridad={prioridad}
-        setPrioridad={setPrioridad}
-        agregarItem={agregarItem}
-      />
+    <div className='bg-blue-900 min-h-screen w-full pt-10 '>
+
+      <TaskForm />
 
       <div>
         <select value={filtro} onChange={(e) => setFiltro(e.target.value)}>
@@ -74,27 +62,10 @@ function App() {
         </select>
       </div>
 
-      <TaskList
-        items={items}
-        onToggle={toggleCompleted}
-        onDelete={borrarItem}
-        abrirModal={abrirModal}
-        colorTexto={obtenerColor}
-      />
+      <TaskList/>
 
       {modalAbierto && (
-        <div className="modal">
-          <input
-            value={nuevoTexto}
-            onChange={(e) => setNuevoTexto(e.target.value)}
-          />
-          <textarea
-            value={nuevaDesc}
-            onChange={(e) => setNuevaDesc(e.target.value)}
-          />
-          <button onClick={guardarCambios}>Guardar</button>
-          <button onClick={() => setModalAbierto(false)}>Cerrar</button>
-        </div>
+      <TaskModal/>
       )}
     </div>
   );

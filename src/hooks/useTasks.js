@@ -16,6 +16,12 @@ function useTasks() {
   // Estado solo de inputs y modales
   const [text, setText] = useState('');
   const [description, setDescription] = useState('');
+   
+  //estado modales
+  const [modalAbierto, setModalAbierto] = useState(false);
+  const [taskActual, setTaskActual] = useState(null);
+  const [nuevoTexto, setNuevoTexto] = useState('');
+  const [nuevaDesc, setNuevaDesc] = useState('');
 
   // ======================
   // CRUD
@@ -100,6 +106,23 @@ function useTasks() {
     }
   };
 
+  ///////////////////////////////
+            //MODAL//
+  //////////////////////////////////
+
+   const abrirModal = (task) => {
+    console.log(task.text);
+    setTaskActual(task);
+    setNuevoTexto(task.text);
+    setNuevaDesc(task.description);
+    setModalAbierto(true);
+  };
+
+  const guardarCambios = () => {
+    editarItem(taskActual.id, nuevoTexto, nuevaDesc);
+    setModalAbierto(false);
+  };
+
   // ======================
   // RETURN (MOCHILA)
   // ======================
@@ -120,6 +143,14 @@ function useTasks() {
     description,
     setDescription,
     obtenerColor,
+    abrirModal,
+    guardarCambios,
+    modalAbierto,
+    setModalAbierto,
+    nuevoTexto,
+    setNuevoTexto,
+    nuevaDesc,
+    setNuevaDesc
   };
 }
 

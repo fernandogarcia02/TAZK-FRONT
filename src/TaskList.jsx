@@ -1,22 +1,16 @@
-import TaskItem from "./TaskItem";
+import useTasksContext from './hooks/useTasksContext';
+import TaskItem from './TaskItem';
 
-function TaskList({items, onToggle, onDelete,abrirModal,colorTexto}) {
-    return(
-        <ul>
-            {items.map((item, index)=>{
-                console.log(items);
-                return(
-                <TaskItem
-                key={item.id}
-                task={item}
-                onToggle={()=>onToggle(item.id)}
-                onDelete={()=>onDelete(item.id)}
-                abrirModal={()=>abrirModal(item.id)}
-                colorTexto={colorTexto(item.priority)}
-                />);
-            })}
-        </ul>
-    )
+function TaskList() {
+  const { items } = useTasksContext();
+
+  return (
+    <ul>
+      {items.map((task) => (
+        <TaskItem key={task.id} task={task} />
+      ))}
+    </ul>
+  );
 }
 
 export default TaskList;
