@@ -44,7 +44,8 @@ function App() {
 
       <TaskForm />
 
-      <div>
+      <div className='flex justify-center'>
+        <div className='w-[300px] h-[30px] bg-gray-300 my-6 flex justify-center rounded-2xl'>
         <select value={filtro} onChange={(e) => setFiltro(e.target.value)}>
           <option value="todas">Todas</option>
           <option value="completadas">Completadas</option>
@@ -60,6 +61,7 @@ function App() {
           <option value="media">Media</option>
           <option value="baja">Baja</option>
         </select>
+        </div>
       </div>
 
       <TaskList/>
