@@ -33,7 +33,7 @@ function TaskItem({ task }) {
       </button>
 
       <button
-      className='text-red-600 hover:bg-red-100 hover:text-white border-2 rounded p-2'
+      className='text-red-600 hover:bg-red-100 hover:text-red-600 border-2 rounded p-2'
         onClick={(e) => {
           e.stopPropagation();
           borrarItem(task.id);

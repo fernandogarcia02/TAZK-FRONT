@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function useTasks() {
   // ======================
@@ -26,32 +26,93 @@ function useTasks() {
   // ======================
   // CRUD
   // ======================
-  const agregarItem = () => {
-    if (text.trim() === '') return;
 
-    const nuevaTarea = {
-      id: crypto.randomUUID(),
+  // GET TAREAS//
+  // 1. DEFINIMOS LA FUNCIÓN AQUÍ (Ahora es visible para todo el hook)
+  const refrescarTareas = async () => {
+    try {
+      const respuesta = await fetch('http://localhost:3000/api/tareas');
+      const datos = await respuesta.json(); // Forma limpia
+      setItems(datos);
+    } catch (error) {
+      console.error("Error al conectar con el backend", error);
+    }
+  };
+
+  // 2. EL useEffect SOLO LA LLAMA AL EMPEZAR
+  useEffect(() => {
+    refrescarTareas();
+  }, []);
+
+  const agregarItem = async () => {
+    if (text.trim() === '') return;
+    try {
+      const nuevaTarea = {
       text,
       description,
       completed: false,
       priority: prioridad,
     };
+      const respuesta = await fetch('http://localhost:3000/api/tareas',{
+          method: 'POST',
+          headers:{
+            'Content-Type' : 'application/json'
+          },
+          body: JSON.stringify(nuevaTarea)
+        }
+      );
+      
+      if (!respuesta.ok) {
+        throw new Error(`Error:${respuesta.status} ${respuesta.statusText}`)
+      }
 
-    setItems((prev) => [...prev, nuevaTarea]);
-    setText('');
-    setDescription('');
+      refrescarTareas();
+      setText('');
+      setDescription('');
+    } catch (error) {
+      console.error("Error creando tarea",error)  
+    }
+
+  
+    
   };
 
-  const toggleCompleted = (id) => {
-    setItems((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, completed: !item.completed } : item
-      )
-    );
+  const toggleCompleted = async (id) => {
+    try {
+      const tarea = items.find(item => item.id === id);
+      if(!tarea){throw new Error('error')};
+
+      const respuesta = await fetch(`http://localhost:3000/api/tareas/${id}`,{
+        method: 'PUT',
+        headers:{
+          'Content-type' : 'application/json'
+        },
+        body: JSON.stringify({completed: !tarea.completed})
+      }
+      );
+      if (!respuesta.ok) {
+        throw new Error(`Error:${respuesta.status} ${respyesta.statusText}`);
+      }
+
+      refrescarTareas();
+    } catch (error) {
+      
+    }
+    
   };
 
-  const borrarItem = (id) => {
-    setItems((prev) => prev.filter((item) => item.id !== id));
+  const borrarItem = async (id) => {
+    try {
+      const respuesta = await fetch(`http://localhost:3000/api/tareas/${id}`,
+        {method: 'DELETE'}
+      );
+      if (!respuesta.ok) {
+        throw new Error(`Error:${respuesta.status} ${respuesta.statusText}`)
+      }
+      refrescarTareas();
+    } catch (error) {
+      console.error("Error borrando la tarea",error)
+    }
   };
 
   const editarItem = (id, nuevoTexto, nuevaDesc) => {
@@ -102,7 +163,7 @@ function useTasks() {
       case 'baja':
         return 'green';
       default:
-        return 'white';
+        return 'black';
     }
   };
 
@@ -118,9 +179,26 @@ function useTasks() {
     setModalAbierto(true);
   };
 
-  const guardarCambios = () => {
-    editarItem(taskActual.id, nuevoTexto, nuevaDesc);
-    setModalAbierto(false);
+  const guardarCambios = async () => {
+    try {
+      const respuesta = await fetch(`http://localhost:3000/api/tareas/${taskActual.id}`,{
+        method: 'PUT',
+        headers:{
+          'Content-type' : 'application/json'
+        },
+        body: JSON.stringify({text:nuevoTexto,description:nuevaDesc})
+      });
+
+      if (!respuesta.ok) {
+        throw new Error(`error:${respuesta.status} ${respuesta.statusText}`);
+      }
+
+      refrescarTareas();
+      setModalAbierto(false);
+    } catch (error) {
+      console.error("Ha habido un error",error);
+    }
+    
   };
 
   // ======================
