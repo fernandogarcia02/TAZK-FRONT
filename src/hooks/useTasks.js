@@ -79,7 +79,7 @@ function useTasks() {
 
   const toggleCompleted = async (id) => {
     try {
-      const tarea = items.find(item => item.id === id);
+      const tarea = items.find(item => item._id === id);
       if(!tarea){throw new Error('error')};
 
       const respuesta = await fetch(`http://localhost:3000/api/tareas/${id}`,{
@@ -91,7 +91,7 @@ function useTasks() {
       }
       );
       if (!respuesta.ok) {
-        throw new Error(`Error:${respuesta.status} ${respyesta.statusText}`);
+        throw new Error(`Error:${respuesta.status} ${respuesta.statusText}`);
       }
 
       refrescarTareas();
@@ -181,7 +181,7 @@ function useTasks() {
 
   const guardarCambios = async () => {
     try {
-      const respuesta = await fetch(`http://localhost:3000/api/tareas/${taskActual.id}`,{
+      const respuesta = await fetch(`http://localhost:3000/api/tareas/${taskActual._id}`,{
         method: 'PUT',
         headers:{
           'Content-type' : 'application/json'

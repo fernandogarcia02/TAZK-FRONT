@@ -26,7 +26,7 @@ function TaskItem({ task }) {
       className='text-green-600 border-2 rounded p-2 m-8 hover:bg-green-100 hover:text-green-600'
         onClick={(e) => {
           e.stopPropagation();
-          toggleCompleted(task.id);
+          toggleCompleted(task._id);
         }}  
       >
         Terminada
@@ -36,7 +36,7 @@ function TaskItem({ task }) {
       className='text-red-600 hover:bg-red-100 hover:text-red-600 border-2 rounded p-2'
         onClick={(e) => {
           e.stopPropagation();
-          borrarItem(task.id);
+          borrarItem(task._id);
         }}
       >
         Eliminar

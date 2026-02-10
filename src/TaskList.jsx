@@ -7,7 +7,7 @@ function TaskList() {
   return (
     <ul className='bg-gray-300 border-l-4 border-green-500 rounded-xl shadow-lg mx-auto w-[900px] h-[400px] font-bold text-lg'>
       {items.map((task) => (
-        <TaskItem key={task.id} task={task} />
+        <TaskItem key={task._id} task={task} />
       ))}
     </ul>
   );
