@@ -1,75 +1,36 @@
-import { useState } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import ProtectedRoute from './components/ProtectedRoute';
+import Home from './pages/Home';
+import Welcome from './pages/Welcome';
 import './App.css';
-import TaskList from './TaskList';
-import TaskForm from './TaskForm';
-import TaskModal from './TaskModal';
-import useTasksContext from './hooks/useTasksContext';
-
 
 function App() {
-
-  // Hook
-  const {
-    items,
-    agregarItem,
-    borrarItem,
-    toggleCompleted,
-    editarItem,
-    filtro,
-    setFiltro,
-    filtroPrioridad,
-    setFiltroPrioridad,
-    prioridad,
-    setPrioridad,
-    text,
-    setText,
-    description,
-    setDescription,
-    obtenerColor,
-    abrirModal,
-    guardarCambios,
-    modalAbierto,
-    setModalAbierto,
-    nuevoTexto,
-    setNuevoTexto,
-    nuevaDesc,
-    setNuevaDesc
-  } = useTasksContext();
-
- 
-
-
   return (
-    <div className='bg-blue-900 min-h-screen w-full pt-10 '>
+    <BrowserRouter>
+      <Routes>
+        {/* PÁGINA PÚBLICA: Get Started */}
+        <Route path="/welcome" element={<Welcome />} />
+        {/*<Route path="/login" element={<Login />} />*/}
 
-      <TaskForm />
+        {/* RUTA PROTEGIDA: Solo si hay token */}
+        <Route 
+          path="/tareas" 
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          } 
+        />
 
-      <div className='flex justify-center'>
-        <div className='w-[300px] h-[30px] bg-gray-300 my-6 flex justify-center rounded-2xl'>
-        <select value={filtro} onChange={(e) => setFiltro(e.target.value)}>
-          <option value="todas">Todas</option>
-          <option value="completadas">Completadas</option>
-          <option value="pendientes">Pendientes</option>
-        </select>
-
-        <select
-          value={filtroPrioridad}
-          onChange={(e) => setFiltroPrioridad(e.target.value)}
-        >
-          <option value="todas">Todas</option>
-          <option value="alta">Alta</option>
-          <option value="media">Media</option>
-          <option value="baja">Baja</option>
-        </select>
-        </div>
-      </div>
-
-      <TaskList/>
-
-      {modalAbierto && (
-      <TaskModal/>
-      )}
-    </div>
+        {/* REDIRECCIÓN POR DEFECTO */}
+        {/* Si entra a "/", comprobamos si tiene token para mandarlo a un sitio u otro */}
+        <Route path="/" element={
+          localStorage.getItem('token_usuario') 
+            ? <Navigate to="/tareas" /> 
+            : <Navigate to="/welcome" />
+        } />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

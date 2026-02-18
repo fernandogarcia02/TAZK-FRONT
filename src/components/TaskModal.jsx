@@ -1,4 +1,4 @@
-import useTasksContext from "./hooks/useTasksContext";
+import useTasksContext from "../hooks/useTasksContext";
 function TaskModal() {
     const {
         nuevoTexto,
