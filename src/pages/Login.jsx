@@ -1,46 +1,46 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useUsersContext from '../hooks/useUsersContext';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+
+
+  const  {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    error,
+    setError,
+    manejarLogin
+  } = useUsersContext();
   
   const navigate = useNavigate();
-
-  const manejarLogin = async (e) => {
-    e.preventDefault(); // Evita que la página se recargue
-    setError('');
-
-    try {
-      const respuesta = await fetch('http://localhost:3000/api/usuarios/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-
-      const data = await respuesta.json();
-
-      if (respuesta.ok) {
-        // 1. Guardamos el token en el cofre (localStorage)
-        localStorage.setItem('token_usuario', data.token);
-        
-        // 2. ¡Saltamos a la aplicación!
-        navigate('/tareas');
-      } else {
-        // Mostramos el error que viene del backend (ej: "Contraseña incorrecta")
-        setError(data.mensaje || 'Error al iniciar sesión');
-      }
-    } catch (err) {
-      setError('No se pudo conectar con el servidor');
-    }
-  };
 
   return (
     <div className="login-container">
       <h2>Iniciar Sesión</h2>
       
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && 
+      <div className="fixed top-5 left-1/2 -translate-x-1/2 z-[100] w-full max-w-sm">
+        <div className="bg-red-600 text-white p-4 rounded-lg shadow-2xl border-l-4 border-red-800 flex items-center justify-between">
+    
+          <div className="flex items-center gap-3">
+            {/* Icono de advertencia simple */}
+            <span className="text-xl">⚠️</span>
+            <p className="font-medium">{error}</p>
+          </div>
+
+        {/* Botón para cerrar manualmente */}
+        <button 
+          onClick={() => setError('')} // 👈 Esto borra el error y hace que el div desaparezca
+          className="ml-4 hover:text-red-200 transition"
+          >
+          ✕
+        </button>  
+      </div>
+    </div>
+  }
 
       <form onSubmit={manejarLogin}>
         <input 
@@ -57,6 +57,7 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
           required 
         />
+        <p>¿No eres miembro aún?<a onClick={()=>navigate('/registro')}>Únete</a></p>
         <button type="submit">Entrar</button>
       </form>
     </div>

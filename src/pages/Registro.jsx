@@ -1,88 +1,82 @@
-import { useState } from "react";
-import { Navigate, useNavigate } from 'react-router-dom';
+import useUsersContext from "../hooks/useUsersContext";
 const Registro = () => {
-    const [email,setEmail] = useState('');
-    const [nombre,setNombre] = useState('');
-    const [contraseña,setContraseña] = useState('');
-    const [contraseña2,setContraseña2] = useState('');
-    const [error, setError] = useState('');
-
-    const Registrar = async (e) => {
-        e.preventDefault();
-        setError('');
-        const navigate = useNavigate();
-        if (contraseña.length < 8) {
-            setError("La contraseña debe incluir al menos 8 caracteres");
-            return;
-        }
-
-        if (contraseña2 === contraseña) {
-            setError("Las contraseñas no coinciden");
-            return;
-        }
-        const tieneMayuscula = /[A-Z]/.test(contraseña);
-        const tieneMinuscula = /[a-z]/.test(contraseña);
-        const tieneNumero = /[\d]/.test(contraseña);
-        const tieneEspecial = /[@$!%*?&-_]/.test(contraseña);
-
-        if (!tieneMayuscula || !tieneMinuscula || !tieneNumero || !tieneEspecial) {
-            setError("La contraseña debe incluir mayúscula, número y carácter especial");
-            return;
-        }
-
-        try {
-            const respuesta = await fetch('http://localhost:3000/api/usuarios/resgistro',{
-                method: 'POST',
-                headers:{'Content-Type': 'application/json'},
-                body: JSON.stringify({nombre,email,contraseña})
-            });
-            const datos = await respuesta.data;
-            if (respuesta.ok) {
-
-                localStorage.setItem('token_usuario', data.token);
-                navigate('/tareas');
-            }else{
-                setError(datos.mensaje);
-            }
-        } catch (error) {
-            setError(error);
-        }
-
+    const {
+        email,
+        setEmail,
+        nombre,
+        setNombre,
+        password,
+        setPassword,
+        password2,
+        setPassword2,
+        error,
+        setError,
+        Registrar
+    } = useUsersContext();
+    
         return(
             <div>
                 <h1>Registrarse</h1>
-                <form onSubmit={()=>Registrar}>
+
+                {error && 
+                <div className="fixed top-5 left-1/2 -translate-x-1/2 z-[100] w-full max-w-sm">
+                    <div className="bg-red-600 text-white p-4 rounded-lg shadow-2xl border-l-4 border-red-800 flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            {/* Icono de advertencia simple */}
+                            <span className="text-xl">⚠️</span>
+                            <p className="font-medium">{error}</p>
+                        </div>
+
+                    {/* Botón para cerrar manualmente */}
+                    <button 
+                        onClick={() => setError('')} // 👈 Esto borra el error y hace que el div desaparezca
+                        className="ml-4 hover:text-red-200 transition"
+                    >
+                        ✕
+                    </button>   
+                    </div>
+                </div>
+                }
+                <form onSubmit={Registrar}>
+                    <label htmlFor="nombre">Nombre</label>
                     <input 
+                    className="border-2"
                     type="text" 
                     name="Nombre" 
                     id="nombre" 
                     value={nombre}
                     required 
                     onChange={(e)=>setNombre(e.target.value)} />
+                    <label htmlFor="email">Email</label>
                     <input 
+                    className="border-2"
                     type="email" 
                     name="email" 
                     id="email"
                     value={email}
                     onChange={(e)=>{setEmail(e.target.value)}} />
+                    <label htmlFor="password">password</label>
                     <input 
+                    className="border-2"
                     type="password" 
                     name="password" 
                     id="password" 
-                    value={contraseña}
-                    onChange={(e)=>setContraseña(e.target.value)}/>
+                    value={password}
+                    onChange={(e)=>setPassword(e.target.value)}/>
+                    <label htmlFor="password">Confirmar password</label>
                     <input 
+                    className="border-2"
                     type="password" 
                     name="password2" 
                     id="password2" 
-                    value={contraseña2}
-                    onChange={(e)=>setContraseña2(e.target.value)}/>
-                    <input type="submit" value="Crear cuenta" />
+                    value={password2}
+                    onChange={(e)=>setPassword2(e.target.value)}/>
+                    <input className="border-2" type="submit" value="Crear cuenta" />
                 </form>
             </div>
         )
         
-    }
+    
 }
 
 export default Registro;

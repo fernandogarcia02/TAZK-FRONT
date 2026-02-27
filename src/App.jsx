@@ -2,34 +2,44 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/Home';
 import Welcome from './pages/Welcome';
+import Registro from './pages/Registro';
+import Login from './pages/Login';
+import TasksProvider from './context/TasksProvider';
+import UsersProvider from './context/UsersProvider';
 import './App.css';
+
+const RootRedirect = () => {
+  const token = localStorage.getItem('token_usuario');
+  return token ? <Navigate to="/tareas" replace /> : <Navigate to="/welcome" replace />;
+};
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        {/* PÁGINA PÚBLICA: Get Started */}
-        <Route path="/welcome" element={<Welcome />} />
-        {/*<Route path="/login" element={<Login />} />*/}
+      <UsersProvider>
+        <Routes>
 
-        {/* RUTA PROTEGIDA: Solo si hay token */}
-        <Route 
-          path="/tareas" 
-          element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          } 
-        />
+          <Route path="/" element={<RootRedirect />} />
 
-        {/* REDIRECCIÓN POR DEFECTO */}
-        {/* Si entra a "/", comprobamos si tiene token para mandarlo a un sitio u otro */}
-        <Route path="/" element={
-          localStorage.getItem('token_usuario') 
-            ? <Navigate to="/tareas" /> 
-            : <Navigate to="/welcome" />
-        } />
-      </Routes>
+          {/* PÁGINA PÚBLICA: Get Started */}
+          <Route path="/welcome" element={<Welcome />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/registro" element={<Registro/>}/>
+
+          {/* RUTA PROTEGIDA: Solo si hay token */}
+          <Route 
+            path="/tareas" 
+            element={
+              <ProtectedRoute>
+                <TasksProvider>
+                  <Home />
+                </TasksProvider>
+              </ProtectedRoute>
+            } 
+          />
+
+        </Routes>
+      </UsersProvider>
     </BrowserRouter>
   );
 }

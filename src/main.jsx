@@ -4,8 +4,9 @@ import App from './App';
 import TasksProvider from './context/TasksProvider';
 import './index.css' 
 
+
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <TasksProvider>
+  <React.StrictMode>
     <App />
-  </TasksProvider>
+  </React.StrictMode>
 );
