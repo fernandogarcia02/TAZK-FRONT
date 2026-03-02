@@ -6,6 +6,7 @@ import Registro from './pages/Registro';
 import Login from './pages/Login';
 import TasksProvider from './context/TasksProvider';
 import UsersProvider from './context/UsersProvider';
+import ListsProvider from './context/ListsProvider';
 import './App.css';
 
 const RootRedirect = () => {
@@ -31,9 +32,11 @@ function App() {
             path="/tareas" 
             element={
               <ProtectedRoute>
+                <ListsProvider>
                 <TasksProvider>
                   <Home />
                 </TasksProvider>
+                </ListsProvider>
               </ProtectedRoute>
             } 
           />

@@ -2,6 +2,7 @@ import TaskList from '../components/TaskList';
 import TaskForm from '../components/TaskForm';
 import TaskModal from '../components/TaskModal';
 import useTasksContext from '../hooks/useTasksContext';
+import Sidebar from '../components/Sidebar.jsx';
 
 
 
@@ -13,12 +14,19 @@ const Home = () =>{
     setFiltro,
     filtroPrioridad,
     setFiltroPrioridad,
-    modalAbierto
+    modalAbierto,
+    abrirCrearTarea
+    
   } = useTasksContext();
     return (
-        <div className='bg-blue-900 min-h-screen w-full pt-10 '>
+        <div className='bg-white min-h-screen w-full pt-10 '>
 
-      <TaskForm />
+      {abrirCrearTarea && (
+        <TaskForm />
+      )}
+      
+      <Sidebar/>
+
 
       <div className='flex justify-center'>
         <div className='w-[300px] h-[30px] bg-gray-300 my-6 flex justify-center rounded-2xl'>

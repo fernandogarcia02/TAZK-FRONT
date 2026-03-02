@@ -24,6 +24,8 @@ function useTasks() {
   const [nuevoTexto, setNuevoTexto] = useState('');
   const [nuevaDesc, setNuevaDesc] = useState('');
 
+  const [abrirCrearTarea, setAbrirCrearTarea] = useState(false);
+
   const navigate = useNavigate();
 
   // ======================
@@ -202,6 +204,10 @@ function useTasks() {
     setModalAbierto(true);
   };
 
+  const modalCrearTarea = () => {
+    setAbrirCrearTarea(true);
+  }
+
   const guardarCambios = async () => {
     try {
       const token = localStorage.getItem('token_usuario');
@@ -253,7 +259,10 @@ function useTasks() {
     nuevoTexto,
     setNuevoTexto,
     nuevaDesc,
-    setNuevaDesc
+    setNuevaDesc,
+    modalCrearTarea,
+    abrirCrearTarea,
+    setAbrirCrearTarea
   };
 }
 

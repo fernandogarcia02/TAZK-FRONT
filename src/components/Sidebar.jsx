@@ -1,12 +1,28 @@
 import { useNavigate } from "react-router-dom";
 import useUsersContext from "../hooks/useUsersContext";
+import useListsContext from "../hooks/useListsContext";
+import useTasksContext from "../hooks/useTasksContext";
+import ListList from "./ListLIst";
+
 
 const Sidebar = () =>{
     const navigate = useNavigate();
+    
+    //listsContext
+    const{
+        listas,
+        imprimirListas
+    } = useListsContext();
 
+    //usersContext
     const {
         cerrarSesion
-    } = useUsersContext;
+    } = useUsersContext();
+
+    //taskscontext
+    const {
+        modalCrearTarea
+    } = useTasksContext();
 
 
     return (
@@ -15,11 +31,11 @@ const Sidebar = () =>{
                 <img src="" alt="" />
             </div>
             <div id="nombre-perfil">
-                <p></p>
+                <p>{localStorage.getItem('nombre_usuario')}</p>
             </div>
 
             <div id="tareas">
-                <button>
+                <button onClick={modalCrearTarea}>
                     <img src="" alt="" />
                     <span>Añadir Tarea</span>
                 </button>
@@ -48,7 +64,7 @@ const Sidebar = () =>{
                 </div>
                 <h2>Listas</h2>
                 <div>
-                     {/*Hacer un componente para imprimir las listas*/ }
+                     <ListList/>
                 </div>
                 <button>
                     <img src="" alt="" />
@@ -62,3 +78,4 @@ const Sidebar = () =>{
         </div>
     )
 }
+export default Sidebar;
