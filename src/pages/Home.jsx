@@ -19,7 +19,7 @@ const Home = () =>{
     
   } = useTasksContext();
     return (
-        <div className='bg-white min-h-screen w-full pt-10 '>
+        <div className='bg-white min-h-screen w-full flex'>
 
       {abrirCrearTarea && (
         <TaskForm />
@@ -28,7 +28,7 @@ const Home = () =>{
       <Sidebar/>
 
 
-      <div className='flex justify-center'>
+      {/*}<div className='flex justify-center'>
         <div className='w-[300px] h-[30px] bg-gray-300 my-6 flex justify-center rounded-2xl'>
         <select value={filtro} onChange={(e) => setFiltro(e.target.value)}>
           <option value="todas">Todas</option>
@@ -46,7 +46,7 @@ const Home = () =>{
           <option value="baja">Baja</option>
         </select>
         </div>
-      </div>
+      </div>{*/}
 
       <TaskList/>
 

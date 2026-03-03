@@ -5,11 +5,16 @@ function TaskList() {
   const { items } = useTasksContext();
 
   return (
-    <ul className='bg-gray-300 border-l-4 border-green-500 rounded-xl shadow-lg mx-auto w-[900px] h-[400px] font-bold text-lg'>
-      {items.map((task) => (
-        <TaskItem key={task._id} task={task} />
-      ))}
-    </ul>
+    <div className='h-[100vh] w-4/5'>
+
+      <h2>HOY</h2>
+      <ul className=''>
+        {items.map((task) => (
+          <TaskItem key={task._id} task={task} />
+        ))}
+      </ul>
+
+    </div>
   );
 }
 

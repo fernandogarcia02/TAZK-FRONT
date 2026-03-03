@@ -6,7 +6,7 @@ function ListList() {
     return(
         <ul>
             {listas.map((list) =>(
-                <li key={list._id}>{list.nombre}</li>
+                <li className="pl-10 pt-2 text-white" key={list._id}>{list.nombre}</li>
             ))}
         </ul>
     )

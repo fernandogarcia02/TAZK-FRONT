@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function useUsers() {
@@ -6,7 +6,9 @@ function useUsers() {
     const [nombre,setNombre] = useState('');
     const [password,setPassword] = useState('');
     const [password2,setPassword2] = useState('');
+    const [foto,setFoto] = useState(null);
     const [error, setError] = useState('');
+    const [perfil,setPerfil] = useState(null);
     const navigate = useNavigate();
 
 
@@ -32,11 +34,19 @@ function useUsers() {
                 return;
             }
 
+            const formData = new FormData();
+            formData.append('nombre',nombre);
+            formData.append('email',email);
+            formData.append('password',password);
+
+            if (foto) {
+                formData.append('foto',foto);
+            }
+
             try {
                 const respuesta = await fetch('http://localhost:3000/api/usuarios/registro',{
                     method: 'POST',
-                    headers:{'Content-Type': 'application/json'},
-                    body: JSON.stringify({nombre,email,password})
+                    body: formData
                 });
                 const datos = await respuesta.json();
                 if (!respuesta.ok) {
@@ -104,6 +114,35 @@ function useUsers() {
         navigate('/welcome');
     };
 
+    const obtenerPerfil = ()=>{
+        const token = localStorage.getItem('token_usuario');
+
+        if (!token) {
+            navigate('/welcome');
+            return;
+        }
+        try {
+            const respuesta = fetch('http://localhost:3000/api/usuarios',{
+                method: 'GET',
+                headers: {'Authorization' : `Bearer ${token}`}
+            });
+
+            if (respuesta.ok) {
+                const datos = respuesta.json();
+                setPerfil(datos);
+            }else{
+                localStorage.removeItem('token_usuario');
+                navigate('/welcome');
+            }
+        } catch (error) {
+            console.error('Error al pedir perfil',error);
+        }
+    }
+
+    useEffect(()=>{
+        obtenerPerfil()
+    },[]);
+
     return{
         cerrarSesion,
         manejarLogin,
@@ -117,7 +156,8 @@ function useUsers() {
         password2,
         setPassword2,
         error,
-        setError
+        setError,
+        obtenerPerfil
     }
 }
 

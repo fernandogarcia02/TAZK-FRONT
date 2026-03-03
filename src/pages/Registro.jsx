@@ -11,7 +11,9 @@ const Registro = () => {
         setPassword2,
         error,
         setError,
-        Registrar
+        Registrar,
+        foto,
+        setFoto
     } = useUsersContext();
     
         return(
@@ -71,6 +73,11 @@ const Registro = () => {
                     id="password2" 
                     value={password2}
                     onChange={(e)=>setPassword2(e.target.value)}/>
+                    <input 
+                    type="file"
+                    accept="image/*"
+                    onChange={(e)=>setFoto(e.target.files[0])}  
+                    />
                     <input className="border-2" type="submit" value="Crear cuenta" />
                 </form>
             </div>

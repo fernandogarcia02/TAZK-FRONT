@@ -40,6 +40,13 @@ function useLists() {
         imprimirListas()
     },[]);
 
+    //para que cuando se envie el formulario de la tarea lista nunca este vacio y minimo tenga el primer id que se muestra en el select
+    useEffect(() =>{
+        if (listas.length > 0 && !lista) {
+            setLista(listas[0]._id);
+        }
+    },[listas,lista,setLista]);
+
 
     return{
         listas,

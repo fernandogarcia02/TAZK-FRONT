@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useListsContext from './useListsContext';
 
 function useTasks() {
   // ======================
@@ -12,11 +13,12 @@ function useTasks() {
   // ======================
   const [filtro, setFiltro] = useState('todas');
   const [filtroPrioridad, setFiltroPrioridad] = useState('todas');
-  const [prioridad, setPrioridad] = useState('alta');
+  const [prioridad, setPrioridad] = useState(false);
 
   // Estado solo de inputs y modales
   const [text, setText] = useState('');
   const [description, setDescription] = useState('');
+  
    
   //estado modales
   const [modalAbierto, setModalAbierto] = useState(false);
@@ -27,6 +29,20 @@ function useTasks() {
   const [abrirCrearTarea, setAbrirCrearTarea] = useState(false);
 
   const navigate = useNavigate();
+
+
+  const fechaHoy = () =>{
+    const hoy = new Date();
+    const yyyy = hoy.getFullYear();
+    const mm = String(hoy.getMonth()+1).padStart(2,'0');
+    const dd = String(hoy.getDay()).padStart(2,'0');
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  const [fechaVencimiento, setFechaVencimiento] = useState(fechaHoy());
+
+
+  const{lista} = useListsContext();
 
   // ======================
   // CRUD
@@ -70,7 +86,10 @@ function useTasks() {
       description,
       completed: false,
       priority: prioridad,
+      list_id: lista,
+      fechaVencimiento: fechaVencimiento
     };
+    console.log(nuevaTarea);
       const respuesta = await fetch('http://localhost:3000/api/tareas',{
           method: 'POST',
           headers:{
@@ -232,6 +251,8 @@ function useTasks() {
     
   };
 
+  
+
   // ======================
   // RETURN (MOCHILA)
   // ======================
@@ -262,7 +283,10 @@ function useTasks() {
     setNuevaDesc,
     modalCrearTarea,
     abrirCrearTarea,
-    setAbrirCrearTarea
+    setAbrirCrearTarea,
+    fechaVencimiento,
+    setFechaVencimiento,
+    fechaHoy
   };
 }
 
