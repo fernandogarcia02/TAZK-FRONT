@@ -12,7 +12,6 @@ function useLists() {
             const token = localStorage.getItem('token_usuario');
 
             if (!token) {
-                navegar('login');
                 return;
             }
             const respuesta = await fetch('http://localhost:3000/api/listas',{
@@ -24,7 +23,6 @@ function useLists() {
 
             if (respuesta.status === 401) {
                 localStorage.removeItem('token_usuario');
-                navegar('/login');
                 return;
             }
 
@@ -37,11 +35,19 @@ function useLists() {
     }
 
     useEffect( () => {
+        const token = localStorage.getItem('token_usuario');
+        if (!token) {
+            return;
+        }
         imprimirListas()
     },[]);
 
     //para que cuando se envie el formulario de la tarea lista nunca este vacio y minimo tenga el primer id que se muestra en el select
     useEffect(() =>{
+        const token = localStorage.getItem('token_usuario');
+        if (!token) {
+            return;
+        }
         if (listas.length > 0 && !lista) {
             setLista(listas[0]._id);
         }

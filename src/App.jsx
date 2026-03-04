@@ -11,37 +11,35 @@ import './App.css';
 
 const RootRedirect = () => {
   const token = localStorage.getItem('token_usuario');
-  return token ? <Navigate to="/tareas" replace /> : <Navigate to="/welcome" replace />;
+  return token ? <Navigate to="/home" replace /> : <Navigate to="/welcome" replace />;
 };
 
 function App() {
   return (
     <BrowserRouter>
+      {/* 1. Users siempre arriba */}
       <UsersProvider>
-        <Routes>
+        {/* 2. Lists y Tasks aquí para que estén disponibles en toda la app 
+               y no se monten/desmonten bruscamente al cambiar de ruta */}
+        <ListsProvider>
+          <TasksProvider>
+            <Routes>
+              <Route path="/" element={<RootRedirect />} />
+              <Route path="/welcome" element={<Welcome />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/registro" element={<Registro/>}/>
 
-          <Route path="/" element={<RootRedirect />} />
-
-          {/* PÁGINA PÚBLICA: Get Started */}
-          <Route path="/welcome" element={<Welcome />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/registro" element={<Registro/>}/>
-
-          {/* RUTA PROTEGIDA: Solo si hay token */}
-          <Route 
-            path="/tareas" 
-            element={
-              <ProtectedRoute>
-                <ListsProvider>
-                <TasksProvider>
-                  <Home />
-                </TasksProvider>
-                </ListsProvider>
-              </ProtectedRoute>
-            } 
-          />
-
-        </Routes>
+              <Route 
+                path="/home" 
+                element={
+                  <ProtectedRoute>
+                    <Home />
+                  </ProtectedRoute>
+                } 
+              />
+            </Routes>
+          </TasksProvider>
+        </ListsProvider>
       </UsersProvider>
     </BrowserRouter>
   );

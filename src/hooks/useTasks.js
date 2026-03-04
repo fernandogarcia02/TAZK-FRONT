@@ -35,7 +35,7 @@ function useTasks() {
     const hoy = new Date();
     const yyyy = hoy.getFullYear();
     const mm = String(hoy.getMonth()+1).padStart(2,'0');
-    const dd = String(hoy.getDay()).padStart(2,'0');
+    const dd = String(hoy.getDate()).padStart(2,'0');
     return `${yyyy}-${mm}-${dd}`;
   }
 
@@ -62,7 +62,7 @@ function useTasks() {
 
       if (respuesta.status === 401) {
         localStorage.removeItem('token_usuario');
-        navigate('/login');
+        navigate('/welcome');
         return;
       }
       const datos = await respuesta.json(); // Forma limpia
@@ -74,6 +74,10 @@ function useTasks() {
 
   // 2. EL useEffect SOLO LA LLAMA AL EMPEZAR
   useEffect(() => {
+    const token = localStorage.getItem('token_usuario');
+    if (!token) {
+      return;
+    }
     refrescarTareas();
   }, []);
 

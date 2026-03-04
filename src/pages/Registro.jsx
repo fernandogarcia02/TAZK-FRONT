@@ -13,7 +13,9 @@ const Registro = () => {
         setError,
         Registrar,
         foto,
-        setFoto
+        setFoto,
+        preview,
+        manejarCambioFoto
     } = useUsersContext();
     
         return(
@@ -73,10 +75,15 @@ const Registro = () => {
                     id="password2" 
                     value={password2}
                     onChange={(e)=>setPassword2(e.target.value)}/>
+                    <div
+                    className="w-32 h-32 rounded-full overflow-hidden"
+                    >
+                        <img src={preview ? preview : '/icons/account.png'} alt="foto de perfil"  className="w-full h-full object-cover"/>
+                    </div>
                     <input 
                     type="file"
                     accept="image/*"
-                    onChange={(e)=>setFoto(e.target.files[0])}  
+                    onChange={manejarCambioFoto}  
                     />
                     <input className="border-2" type="submit" value="Crear cuenta" />
                 </form>

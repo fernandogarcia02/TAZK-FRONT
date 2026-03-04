@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import imageCompression from "browser-image-compression";
 
 function useUsers() {
     const [email,setEmail] = useState('');
@@ -7,6 +8,7 @@ function useUsers() {
     const [password,setPassword] = useState('');
     const [password2,setPassword2] = useState('');
     const [foto,setFoto] = useState(null);
+    const [preview,setPreview] = useState(null);
     const [error, setError] = useState('');
     const [perfil,setPerfil] = useState(null);
     const navigate = useNavigate();
@@ -69,8 +71,13 @@ function useUsers() {
 
                 const res = await crearLista.json();
 
+                await obtenerPerfil();
+
+
+                limpiarFormulario();
+
                 if (crearLista.ok) {
-                    navigate('/tareas');
+                    navigate('/home');
                 }else{
                     setError(res.mensaje);
                 }
@@ -97,9 +104,13 @@ function useUsers() {
             // 1. Guardamos el token en el cofre (localStorage)
             localStorage.setItem('token_usuario', data.token);
             localStorage.setItem('nombre_usuario',data.usuario.nombre);
+
+            await obtenerPerfil();
+
+            limpiarFormulario();
             
             // 2. ¡Saltamos a la aplicación!
-            navigate('/tareas');
+            navigate('/home');
         } else {
             // Mostramos el error que viene del backend (ej: "Contraseña incorrecta")
             setError(data.mensaje || 'Error al iniciar sesión');
@@ -114,25 +125,60 @@ function useUsers() {
         navigate('/welcome');
     };
 
-    const obtenerPerfil = ()=>{
+    const manejarCambioFoto = async (e) =>{
+        const archivo = e.target.files[0];
+        if (archivo) {
+            //vista previa de la foto al registrarse
+            const urlPreview = URL.createObjectURL(archivo);
+            setPreview(urlPreview);
+
+            //configurar compresion de la libreria image-compression
+            const opciones = {
+                maxSizeMB: 1,
+                maxWidthOrHeight: 800,
+                useWebWorker: true
+            };
+
+            try {
+                //ejecutamos la compresion
+                const archivoComprimido = await imageCompression(archivo,opciones);
+
+                setFoto(archivoComprimido);
+            } catch (error) {
+                console.log('error al comprimir foto');
+            }
+
+
+        }
+    }
+
+    const limpiarFormulario = () => {
+    setNombre('');
+    setEmail('');
+    setPassword('');
+    setPassword2('');
+    setFoto(null);
+    setPreview(null);
+    setError('');
+};
+
+    const obtenerPerfil = async()=>{
         const token = localStorage.getItem('token_usuario');
 
         if (!token) {
-            navigate('/welcome');
             return;
         }
         try {
-            const respuesta = fetch('http://localhost:3000/api/usuarios',{
+            const respuesta = await fetch('http://localhost:3000/api/usuarios',{
                 method: 'GET',
                 headers: {'Authorization' : `Bearer ${token}`}
             });
 
             if (respuesta.ok) {
-                const datos = respuesta.json();
+                const datos = await respuesta.json();
                 setPerfil(datos);
             }else{
                 localStorage.removeItem('token_usuario');
-                navigate('/welcome');
             }
         } catch (error) {
             console.error('Error al pedir perfil',error);
@@ -140,7 +186,10 @@ function useUsers() {
     }
 
     useEffect(()=>{
-        obtenerPerfil()
+        const token = localStorage.getItem('token_usuario');
+        if (token) {
+         obtenerPerfil()   
+        }
     },[]);
 
     return{
@@ -157,7 +206,13 @@ function useUsers() {
         setPassword2,
         error,
         setError,
-        obtenerPerfil
+        obtenerPerfil,
+        perfil,
+        setPerfil,
+        foto,
+        setFoto,
+        preview,
+        manejarCambioFoto
     }
 }
 
