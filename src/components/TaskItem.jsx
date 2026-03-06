@@ -3,45 +3,66 @@ import useTasksContext from '../hooks/useTasksContext';
 function TaskItem({ task }) {
   const {
     toggleCompleted,
-    borrarItem,
     abrirModal,
-    obtenerColor
   } = useTasksContext();
+
+  const vencida = () =>{
+    const hoy = new Date();
+    const fechaTarea = new Date(task.fechaVencimiento);
+    const hoySoloFecha = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
+    const tareaSoloFecha = new Date(fechaTarea.getFullYear(), fechaTarea.getMonth(),fechaTarea.getDate());
+
+    return tareaSoloFecha < hoySoloFecha && !task.completed;
+  }
+
+  const estaVencida = vencida();
+
+
+  const formatearFecha = (fechaRaw) => {
+    if(!fechaRaw) return "";
+
+    const fecha = new Date(fechaRaw);
+
+    return fecha.toLocaleDateString('es-ES',{
+      day: 'numeric',
+      month: 'short'
+    }).replace('.','');
+
+  }
+
+  const fechaFormateada = formatearFecha(task.fechaVencimiento);
+  
 
   return (
     <li
-    className='flex items-center justify-between'
-      onClick={() => abrirModal(task)}
-      style={{
-        cursor: 'pointer',
-        color: obtenerColor(task.priority),
-        textDecoration: task.completed ? 'line-through' : 'none'
-      }}
-    >
-      {task.text}
-
-      <div>
-
+    className='flex items-center justify-between py-6 border-b mr-20'
+    > 
+    <div className='flex items-center'>
+      <input 
+      type="checkbox" 
+      checked={task.completed}
+      className='accent-[#007011] w-4 h-4 cursor-pointer hover:scale-105 active:scale-95 transition-all'
+      onChange={(e) => {
+        toggleCompleted(task._id)
+      }
+      }
+      />
+      <span className={`${task.completed ? 'line-through opacity-50' : ''} pl-5 text-[18px] ${task.priority ? 'font-bold text-[#007011]' : ''} ${estaVencida ? 'font-bold text-[#E3D264]' : ''}`}>{task.text}</span>
+      {estaVencida && (
+        <img src="/icons/warning.png" alt="tarea vencida" />
+      )}
+    </div>
+    <div className='flex items-center'>
+      <span className='pr-20 text-[#007011]'>{fechaFormateada}</span>
       <button
-      className='text-green-600 border-2 rounded p-2 m-8 hover:bg-green-100 hover:text-green-600'
-        onClick={(e) => {
-          e.stopPropagation();
-          toggleCompleted(task._id);
-        }}  
+      className='cursor-pointer hover:scale-110 active:scale-90 transition-all duration-400'
+      onClick={()=>abrirModal(task)}
       >
-        Terminada
+        <img className='h-[20px] w-[20px]' src="/icons/arrow_forward.png" alt="editar tarea" />
       </button>
+    </div>
+      
 
-      <button
-      className='text-red-600 hover:bg-red-100 hover:text-red-600 border-2 rounded p-2'
-        onClick={(e) => {
-          e.stopPropagation();
-          borrarItem(task._id);
-        }}
-      >
-        Eliminar
-      </button>
-      </div>
     </li>
   );
 }

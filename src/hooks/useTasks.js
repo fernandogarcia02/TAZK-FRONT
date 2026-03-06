@@ -8,11 +8,6 @@ function useTasks() {
   // ======================
   const [items, setItems] = useState([]);
 
-  // ======================
-  // ESTADOS DE UI / FILTROS
-  // ======================
-  const [filtro, setFiltro] = useState('todas');
-  const [filtroPrioridad, setFiltroPrioridad] = useState('todas');
   const [prioridad, setPrioridad] = useState(false);
 
   // Estado solo de inputs y modales
@@ -173,47 +168,29 @@ function useTasks() {
     );
   };
 
-  // ======================
-  // FILTROS
-  // ======================
-  const tareasFiltradas = items
-    .filter((item) => {
-      if (filtro === 'completadas') return item.completed;
-      if (filtro === 'pendientes') return !item.completed;
-      return true;
-    })
-    .filter((item) => {
-      if (filtroPrioridad === 'todas') return true;
-      return item.priority === filtroPrioridad;
-    });
+ 
 
   // ======================
   // ORDENACIÓN
   // ======================
-  const prioridadValor = { alta: 1, media: 2, baja: 3 };
+ const tareasOrdenadas = [...items].sort((a, b) => {
+  // 1. Prioridad por estado de completado
+  // (Queremos las NO completadas arriba)
+  if (a.completed !== b.completed) {
+    return a.completed ? 1 : -1;
+  }
 
-  const tareasOrdenadas = [...tareasFiltradas].sort((a, b) => {
-    if (a.completed !== b.completed) {
-      return a.completed ? 1 : -1;
-    }
-    return prioridadValor[a.priority] - prioridadValor[b.priority];
-  });
+  // 2. Si ambas están igual (ej: ambas pendientes), ordenamos por fecha
+  const fechaA = new Date(a.fechaVencimiento).getTime();
+  const fechaB = new Date(b.fechaVencimiento).getTime();
 
-  // ======================
-  // UTILIDADES
-  // ======================
-  const obtenerColor = (priority) => {
-    switch (priority) {
-      case 'alta':
-        return 'red';
-      case 'media':
-        return 'orange';
-      case 'baja':
-        return 'green';
-      default:
-        return 'black';
-    }
-  };
+  // Si no hay fecha, la mandamos al final
+  if (isNaN(fechaA)) return 1;
+  if (isNaN(fechaB)) return -1;
+
+  return fechaA - fechaB; // Menor tiempo (más vieja/próxima) primero
+});
+
 
   ///////////////////////////////
             //MODAL//
@@ -266,17 +243,12 @@ function useTasks() {
     borrarItem,
     toggleCompleted,
     editarItem,
-    filtro,
-    setFiltro,
-    filtroPrioridad,
-    setFiltroPrioridad,
     prioridad,
     setPrioridad,
     text,
     setText,
     description,
     setDescription,
-    obtenerColor,
     abrirModal,
     guardarCambios,
     modalAbierto,

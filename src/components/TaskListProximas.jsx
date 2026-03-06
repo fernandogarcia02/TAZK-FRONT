@@ -1,23 +1,16 @@
 import useTasksContext from '../hooks/useTasksContext';
 import TaskItem from './TaskItem';
 
-function TaskList() {
+function TaskListProximas() {
   const { items } = useTasksContext();
-
-  const hoy = new Date().toLocaleDateString();
-
-  const tareasHoy = items.filter((task) =>{
-    const fechaTarea = new Date(task.fechaVencimiento).toLocaleDateString();
-    return hoy === fechaTarea;
-  })
 
   return (
     <div className='h-[100vh] w-4/5'>
       <div className='h-1/10'></div>
       <div className='h-9/10 pl-20'>
-        <h2 className='font-bold font-poppins text-[50px] leading-none'>HOY</h2>
+        <h2 className='font-bold font-poppins text-[50px] leading-none'>PRÓXIMAS TAREAS</h2>
         <ul className=''>
-          {tareasHoy.map((task) => (
+          {items.map((task) => (
             <TaskItem key={task._id} task={task} />
           ))}
         </ul>
@@ -28,4 +21,4 @@ function TaskList() {
   );
 }
 
-export default TaskList;
+export default TaskListProximas;

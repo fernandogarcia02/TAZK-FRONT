@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/Home';
+import Proximas from './pages/Proximas';
 import Welcome from './pages/Welcome';
 import Registro from './pages/Registro';
 import Login from './pages/Login';
@@ -36,6 +37,15 @@ function App() {
                     <Home />
                   </ProtectedRoute>
                 } 
+              />
+
+              <Route
+                path='/proximas'
+                element={
+                  <ProtectedRoute>
+                    <Proximas/>
+                  </ProtectedRoute>
+                }
               />
             </Routes>
           </TasksProvider>

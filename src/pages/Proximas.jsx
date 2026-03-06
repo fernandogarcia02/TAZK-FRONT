@@ -1,4 +1,4 @@
-import TaskList from '../components/TaskList';
+import TaskListProximas from '../components/TaskListProximas.jsx';
 import TaskForm from '../components/TaskForm';
 import TaskModal from '../components/TaskModal';
 import useTasksContext from '../hooks/useTasksContext';
@@ -6,7 +6,7 @@ import Sidebar from '../components/Sidebar.jsx';
 
 
 
-const Home = () =>{
+const Proximas = () =>{
 
     // Hook
   const {
@@ -24,7 +24,7 @@ const Home = () =>{
       <Sidebar/>
 
 
-      <TaskList/>
+      <TaskListProximas/>
 
       {modalAbierto && (
       <TaskModal/>
@@ -32,4 +32,4 @@ const Home = () =>{
     </div>
     )
 }
-export default Home;
+export default Proximas;
