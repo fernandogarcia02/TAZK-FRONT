@@ -2,6 +2,9 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/Home';
 import Proximas from './pages/Proximas';
+import Terminadas from './pages/Terminadas';
+import Importantes from './pages/Importantes';
+import Listas from './pages/Listas';
 import Welcome from './pages/Welcome';
 import Registro from './pages/Registro';
 import Login from './pages/Login';
@@ -47,6 +50,34 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+
+              <Route
+                path='/terminadas'
+                element={
+                  <ProtectedRoute>
+                    <Terminadas/>
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path='/importantes'
+                element={
+                  <ProtectedRoute>
+                    <Importantes/>
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path='/lista/:id'
+                element={
+                  <ProtectedRoute>
+                    <Listas/>
+                  </ProtectedRoute>
+                }
+              />
+              
             </Routes>
           </TasksProvider>
         </ListsProvider>

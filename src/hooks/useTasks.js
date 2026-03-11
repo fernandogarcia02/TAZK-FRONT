@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useListsContext from './useListsContext';
 
@@ -15,11 +15,14 @@ function useTasks() {
   const [description, setDescription] = useState('');
   
    
-  //estado modales
+  //estados para editar
   const [modalAbierto, setModalAbierto] = useState(false);
-  const [taskActual, setTaskActual] = useState(null);
-  const [nuevoTexto, setNuevoTexto] = useState('');
-  const [nuevaDesc, setNuevaDesc] = useState('');
+  const [taskEditar, setTaskEditar] = useState(null);
+  const [editarTexto, setEditarTexto] = useState('');
+  const [editarDescription, setEditarDescription] = useState('');
+  const [editarFechaVencimiento, setEditarFechaVencimiento] = useState(null);
+  const [editarPrioridad, setEditarPrioridad] = useState(null);
+  
 
   const [abrirCrearTarea, setAbrirCrearTarea] = useState(false);
 
@@ -37,7 +40,7 @@ function useTasks() {
   const [fechaVencimiento, setFechaVencimiento] = useState(fechaHoy());
 
 
-  const{lista} = useListsContext();
+  const{lista,setLista,editarLista,setEditarLista} = useListsContext();
 
   // ======================
   // CRUD
@@ -88,7 +91,6 @@ function useTasks() {
       list_id: lista,
       fechaVencimiento: fechaVencimiento
     };
-    console.log(nuevaTarea);
       const respuesta = await fetch('http://localhost:3000/api/tareas',{
           method: 'POST',
           headers:{
@@ -106,6 +108,9 @@ function useTasks() {
       refrescarTareas();
       setText('');
       setDescription('');
+      setPrioridad(false);
+      setLista('');
+      setFechaVencimiento(fechaHoy());
     } catch (error) {
       console.error("Error creando tarea",error)  
     }
@@ -143,18 +148,26 @@ function useTasks() {
   const borrarItem = async (id) => {
     try {
       const token = localStorage.getItem('token_usuario');
-      const respuesta = await fetch(`http://localhost:3000/api/tareas/${id}`,{
+      const respuesta = await fetch(`http://localhost:3000/api/tareas/${id}`, {
         method: 'DELETE',
-      headers:{
-        'Authorization' : `Bearer ${token}`
-      }}
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }
       );
       if (!respuesta.ok) {
         throw new Error(`Error:${respuesta.status} ${respuesta.statusText}`)
       }
       refrescarTareas();
+      setModalAbierto(false);
+      setTaskEditar(null);
+      setEditarTexto('');
+      setEditarDescription('');
+      setEditarFechaVencimiento(null);
+      setEditarPrioridad(null);
+      setEditarLista(null);
     } catch (error) {
-      console.error("Error borrando la tarea",error)
+      console.error("Error borrando la tarea", error)
     }
   };
 
@@ -197,10 +210,12 @@ function useTasks() {
   //////////////////////////////////
 
    const abrirModal = (task) => {
-    console.log(task.text);
-    setTaskActual(task);
-    setNuevoTexto(task.text);
-    setNuevaDesc(task.description);
+    setTaskEditar(task);
+    setEditarTexto(task.text);
+    setEditarDescription(task.description);
+    setEditarFechaVencimiento(task.fechaVencimiento ? task.fechaVencimiento.split('T')[0] : "");
+    setEditarLista(task.list_id);
+    setEditarPrioridad(task.priority);
     setModalAbierto(true);
   };
 
@@ -211,13 +226,20 @@ function useTasks() {
   const guardarCambios = async () => {
     try {
       const token = localStorage.getItem('token_usuario');
-      const respuesta = await fetch(`http://localhost:3000/api/tareas/${taskActual._id}`,{
+      const tareaEditada = {
+        text:editarTexto,
+        description:editarDescription,
+        priority:editarPrioridad,
+        list_id:editarLista,
+        fechaVencimiento:editarFechaVencimiento
+      }
+      const respuesta = await fetch(`http://localhost:3000/api/tareas/${taskEditar._id}`,{
         method: 'PUT',
         headers:{
           'Content-type' : 'application/json',
           'Authorization' : `Bearer ${token}`
         },
-        body: JSON.stringify({text:nuevoTexto,description:nuevaDesc})
+        body: JSON.stringify(tareaEditada)
       });
 
       if (!respuesta.ok) {
@@ -226,6 +248,12 @@ function useTasks() {
 
       refrescarTareas();
       setModalAbierto(false);
+      setTaskEditar(null);
+      setEditarTexto('');
+      setEditarDescription('');
+      setEditarFechaVencimiento(null);
+      setEditarLista(null);
+      setEditarPrioridad(null);
     } catch (error) {
       console.error("Ha habido un error",error);
     }
@@ -253,10 +281,16 @@ function useTasks() {
     guardarCambios,
     modalAbierto,
     setModalAbierto,
-    nuevoTexto,
-    setNuevoTexto,
-    nuevaDesc,
-    setNuevaDesc,
+    taskEditar,
+    setTaskEditar,
+    editarTexto,
+    setEditarTexto,
+    editarDescription,
+    setEditarDescription,
+    editarPrioridad,
+    setEditarPrioridad,
+    editarFechaVencimiento,
+    setEditarFechaVencimiento,
     modalCrearTarea,
     abrirCrearTarea,
     setAbrirCrearTarea,

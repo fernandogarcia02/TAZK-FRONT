@@ -11,7 +11,9 @@ const Sidebar = () =>{
     //listsContext
     const{
         listas,
-        imprimirListas
+        imprimirListas,
+        setModalCrearLista,
+        modalCrearLista
     } = useListsContext();
 
     //usersContext
@@ -61,7 +63,7 @@ const Sidebar = () =>{
                 <div>
                     <NavLink className={linkStyle} to="/proximas">
                         <img src="/icons/proximas_tareas.png" alt="proximas tareas" className="h-[45px] w-[45px]" />
-                        <span className="text-white">Próximas tareas</span>
+                        <span className="text-white pl-2">Próximas tareas</span>
                     </NavLink>
                     <NavLink className={linkStyle} to="/home">
                         <img src="/icons/hoy.png" alt="hoy" className="h-[45px] w-[45px]"/>
@@ -84,12 +86,16 @@ const Sidebar = () =>{
                 <div>
                      <ListList/>
                 </div>
-                <button className="flex items-center pl-3 pt-4 opacity-80">
+                <button className="flex items-center pl-3 pt-4 opacity-80 hover:scale-110 cursor-pointer transition-all"
+                onClick={()=>{
+                    setModalCrearLista(!modalCrearLista);
+                }}
+                >
                     <img src="/icons/add_list.png" alt="add list" className="h-[30px] w-[30px]" />
                     <span className="text-[#A7A7A7]">Añadir Lista</span>
                 </button>
                 <button
-                className="absolute flex left-6 bottom-10 items-center" 
+                className="absolute flex left-6 bottom-10 items-center hover:scale-110 active:scale-95 transition-all cursor-pointer" 
                  onClick={cerrarSesion}>
                     <img src="/icons/logout.png" alt="logout" />
                     <span className="font-bold">Cerrar sesion</span>

@@ -49,11 +49,11 @@ function TaskItem({ task }) {
       />
       <span className={`${task.completed ? 'line-through opacity-50' : ''} pl-5 text-[18px] ${task.priority ? 'font-bold text-[#007011]' : ''} ${estaVencida ? 'font-bold text-[#E3D264]' : ''}`}>{task.text}</span>
       {estaVencida && (
-        <img src="/icons/warning.png" alt="tarea vencida" />
+        <img src="/icons/warning.png" alt="tarea vencida" className='pl-3' />
       )}
     </div>
     <div className='flex items-center'>
-      <span className='pr-20 text-[#007011]'>{fechaFormateada}</span>
+      <span className={`pr-20 text-[#007011] ${estaVencida ? 'font-bold text-[#E3D264]' : ''}`}>{fechaFormateada}</span>
       <button
       className='cursor-pointer hover:scale-110 active:scale-90 transition-all duration-400'
       onClick={()=>abrirModal(task)}

@@ -1,14 +1,14 @@
-import TaskList from '../components/TaskList';
+import TaskListTerminadas from '../components/TaskListTerminadas.jsx';
 import TaskForm from '../components/TaskForm';
-import TaskModal from '../components/TaskModal';
 import CrearLista from '../components/CrearLista.jsx';
+import TaskModal from '../components/TaskModal';
 import useTasksContext from '../hooks/useTasksContext';
-import Sidebar from '../components/Sidebar.jsx';
 import useListsContext from '../hooks/useListsContext.js';
+import Sidebar from '../components/Sidebar.jsx';
 
 
 
-const Home = () =>{
+const Terminadas = () =>{
 
     // Hook
   const {
@@ -16,7 +16,6 @@ const Home = () =>{
     abrirCrearTarea
     
   } = useTasksContext();
-
   const {modalCrearLista} = useListsContext();
     return (
         <div className='bg-white min-h-screen w-full flex'>
@@ -28,7 +27,7 @@ const Home = () =>{
       <Sidebar/>
 
 
-      <TaskList/>
+      <TaskListTerminadas/>
 
       {modalCrearLista && (
         <CrearLista/>
@@ -40,4 +39,4 @@ const Home = () =>{
     </div>
     )
 }
-export default Home;
+export default Terminadas;

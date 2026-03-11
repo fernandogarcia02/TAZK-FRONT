@@ -4,8 +4,41 @@ import { useNavigate } from "react-router-dom";
 function useLists() {
     const [listas,setListas] = useState([]);
     const [lista,setLista] = useState('');
+    const [editarLista, setEditarLista] = useState(null);
+    const [nombreLista, setNombreLista] = useState('');
+    const [modalCrearLista, setModalCrearLista] = useState(false);
 
     const navegar = useNavigate();
+
+    const crearLista = async () =>{
+        if(!nombreLista.trim()) return;
+        
+        try {
+            const token = localStorage.getItem('token_usuario');
+
+            if(!token) return;
+
+            const respuesta = await fetch('http://localhost:3000/api/listas',{
+                method: 'POST',
+                headers:{
+                    'Content-Type' : 'application/json',
+                    'Authorization' : `Bearer ${token}`
+                },
+                body: JSON.stringify({nombre:nombreLista})
+            });
+
+            if(respuesta.ok){
+                setNombreLista('');
+                imprimirListas();
+                setModalCrearLista(false);
+            }else{
+                const errorMensaje = respuesta.json();
+                console.error("Error creando la lista:", errorMensaje.mensaje);
+            }
+        } catch (error) {
+            console.log("Error creando la lista",error);
+        }
+    }
 
     const imprimirListas = async () =>{
         try {
@@ -59,7 +92,14 @@ function useLists() {
         setListas,
         lista,
         setLista,
-        imprimirListas
+        editarLista,
+        setEditarLista,
+        imprimirListas,
+        nombreLista,
+        setNombreLista,
+        crearLista,
+        modalCrearLista,
+        setModalCrearLista
     };
 }
 
