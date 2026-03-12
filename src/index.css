@@ -27,7 +27,29 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     width: auto;
 }
 
-/* Importante: para que el CSS anterior funcione, el input debe tener posición relativa */
-input[type="date"] {
-    position: relative;
+/* 1. Definimos el ancho total del área de scroll */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 12px; /* Un poco más ancho para tener margen de maniobra */
+}
+
+/* 2. El "Thumb" (la pieza que se mueve) */
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    /* Usamos un color un poco más sólido para que no desaparezca */
+    background-color: rgba(217, 217, 217, 0.4); 
+    
+    /* Redondeado total */
+    border-radius: 10px;
+    
+    /* EL TRUCO PARA LLEVARLA AL INTERIOR: 
+       Añadimos un borde transparente grueso. 
+       Esto crea un "aire" a la derecha y a la izquierda de la barra. */
+    border: 3px solid transparent;
+    
+    /* Esto es vital: obliga al color de fondo a no pintar sobre el borde transparente */
+    background-clip: content-box; 
+}
+
+/* 3. Para que cuando pasen el ratón se vea más clara */
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(217, 217, 217, 0.7);
 }

@@ -1,42 +1,13 @@
-import TaskListList from '../components/TaskListList.jsx';
-import TaskForm from '../components/TaskForm';
-import TaskModal from '../components/TaskModal';
-import CrearLista from '../components/CrearLista.jsx';
-import useTasksContext from '../hooks/useTasksContext';
-import useListsContext from '../hooks/useListsContext.js';
-import Sidebar from '../components/Sidebar.jsx';
+import useListsContext from "../hooks/useListsContext";
+import Sidebar from "../components/Sidebar";
+import TaskForm from "../components/TaskForm";
 
 
+function Listas() {
+    return(
+        <div>
+            <h2></h2>
+        </div>
+    )    
 
-const Listas = () =>{
-
-    // Hook
-  const {
-    modalAbierto,
-    abrirCrearTarea
-    
-  } = useTasksContext();
-  const {modalCrearLista} = useListsContext();
-    return (
-        <div className='bg-white min-h-screen w-full flex'>
-
-      {abrirCrearTarea && (
-        <TaskForm />
-      )}
-      
-      <Sidebar/>
-
-
-      <TaskListList/>
-
-      {modalCrearLista && (
-        <CrearLista/>
-      )}
-
-      {modalAbierto && (
-      <TaskModal/>
-      )}
-    </div>
-    )
 }
-export default Listas;

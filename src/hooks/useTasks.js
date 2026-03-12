@@ -296,7 +296,8 @@ function useTasks() {
     setAbrirCrearTarea,
     fechaVencimiento,
     setFechaVencimiento,
-    fechaHoy
+    fechaHoy,
+    refrescarTareas
   };
 }
 

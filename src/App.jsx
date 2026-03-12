@@ -4,10 +4,11 @@ import Home from './pages/Home';
 import Proximas from './pages/Proximas';
 import Terminadas from './pages/Terminadas';
 import Importantes from './pages/Importantes';
-import Listas from './pages/Listas';
+import Lista from './pages/Lista';
 import Welcome from './pages/Welcome';
 import Registro from './pages/Registro';
 import Login from './pages/Login';
+import Calendario from './pages/Calendario';
 import TasksProvider from './context/TasksProvider';
 import UsersProvider from './context/UsersProvider';
 import ListsProvider from './context/ListsProvider';
@@ -73,7 +74,16 @@ function App() {
                 path='/lista/:id'
                 element={
                   <ProtectedRoute>
-                    <Listas/>
+                    <Lista/>
+                  </ProtectedRoute>
+                }
+              />
+
+                <Route
+                path='/calendario'
+                element={
+                  <ProtectedRoute>
+                    <Calendario/>
                   </ProtectedRoute>
                 }
               />

@@ -12,7 +12,8 @@ function TaskForm(){
         agregarItem,
         setAbrirCrearTarea,
         fechaVencimiento,
-        setFechaVencimiento
+        setFechaVencimiento,
+        fechaHoy
     } = useTasksContext();
 
     const {
@@ -33,6 +34,7 @@ function TaskForm(){
                 onClick={(e)=>{
                     e.preventDefault();
                     setAbrirCrearTarea(false);
+                    setFechaVencimiento(fechaHoy());
                 }}>
                     <img src="/icons/close.png" alt="close" className="w-[35px] h-[35px]" />
                 </button>

@@ -5,11 +5,11 @@ import useTasksContext from "../hooks/useTasksContext";
 import ListList from "./ListLIst";
 
 
-const Sidebar = () =>{
+const Sidebar = () => {
     const navigate = useNavigate();
-    
+
     //listsContext
-    const{
+    const {
         listas,
         imprimirListas,
         setModalCrearLista,
@@ -29,7 +29,7 @@ const Sidebar = () =>{
 
     const urlFoto = perfil?.fotoPerfil ? `http://localhost:3000${perfil.fotoPerfil}` : '/icons/account.png';
 
-    const linkStyle = ({isActive}) =>{
+    const linkStyle = ({ isActive }) => {
         const estiloResaltado = "bg-[#D9D9D9]/50 rounded-xl";
         const estiloNormal = "hover:bg-[#D9D9D9]/50 rounded-xl";
 
@@ -39,7 +39,7 @@ const Sidebar = () =>{
 
     return (
         <div id="sidebar"
-        className="w-1/5 h-screen flex flex-col"
+            className="w-1/5 h-screen flex flex-col"
         >
             <div className="flex items-center h-1/10 pl-5">
                 <div id="foto-perfil" className=" w-[50px] h-[50px] rounded-full overflow-hidden">
@@ -51,10 +51,10 @@ const Sidebar = () =>{
             </div>
 
             <div id="tareas"
-            className="relative rounded-r-[25px] font-inter bg-[#007011] h-9/10 flex-1"
+                className="relative rounded-r-[25px] font-inter bg-[#007011] h-9/10 flex-1"
             >
                 <button onClick={modalCrearTarea}
-                className="flex items-center pt-10 pl-5 cursor-pointer transition-all duration-300 hover:scale-105 hover:brightness-125 active:scale-95"
+                    className="flex items-center pt-10 pl-5 cursor-pointer transition-all duration-300 hover:scale-105 hover:brightness-125 active:scale-95"
                 >
                     <img src="/icons/add.png" alt="add task" />
                     <span className="p-2 font-bold text-[20px]">Añadir Tarea</span>
@@ -66,37 +66,45 @@ const Sidebar = () =>{
                         <span className="text-white pl-2">Próximas tareas</span>
                     </NavLink>
                     <NavLink className={linkStyle} to="/home">
-                        <img src="/icons/hoy.png" alt="hoy" className="h-[45px] w-[45px]"/>
+                        <img src="/icons/hoy.png" alt="hoy" className="h-[45px] w-[45px]" />
                         <span className="text-white pl-2">Hoy</span>
                     </NavLink>
                     <NavLink className={linkStyle} to="/calendario">
-                        <img src="/icons/calendario.png" alt="calendario" className="h-[45px] w-[45px]"/>
+                        <img src="/icons/calendario.png" alt="calendario" className="h-[45px] w-[45px]" />
                         <span className="text-white pl-2">Calendario</span>
                     </NavLink>
                     <NavLink className={linkStyle} to="/terminadas">
-                        <img src="/icons/terminadas.png" alt="terminadas" className="h-[45px] w-[45px]"/>
+                        <img src="/icons/terminadas.png" alt="terminadas" className="h-[45px] w-[45px]" />
                         <span className="text-white pl-2">Terminadas</span>
                     </NavLink>
                     <NavLink className={linkStyle} to="/importantes">
-                        <img src="/icons/importantes.png" alt="importantes" className="h-[45px] w-[45px]"/>
+                        <img src="/icons/importantes.png" alt="importantes" className="h-[45px] w-[45px]" />
                         <span className="text-white pl-2">Importantes</span>
                     </NavLink>
                 </div>
-                <h2 className="text-white font-bold text-[25px] pl-5 pt-4">Listas</h2>
-                <div>
-                     <ListList/>
+                <div className="flex justify-between items-center py-3 px-5">
+                    <h2 className="text-white font-bold text-[25px]">Listas</h2>
+                    <NavLink
+                        className='cursor-pointer hover:scale-110 active:scale-90 transition-all duration-400'
+                        to="/listas"
+                    >
+                        <img className='h-[20px] w-[20px]' src="/icons/forward_white.png" alt="editar tarea" />
+                    </NavLink>
+                </div>
+                <div className="max-h-[140px] overflow-y-auto custom-scrollbar">
+                    <ListList />
                 </div>
                 <button className="flex items-center pl-3 pt-4 opacity-80 hover:scale-110 cursor-pointer transition-all"
-                onClick={()=>{
-                    setModalCrearLista(!modalCrearLista);
-                }}
+                    onClick={() => {
+                        setModalCrearLista(!modalCrearLista);
+                    }}
                 >
                     <img src="/icons/add_list.png" alt="add list" className="h-[30px] w-[30px]" />
                     <span className="text-[#A7A7A7]">Añadir Lista</span>
                 </button>
                 <button
-                className="absolute flex left-6 bottom-10 items-center hover:scale-110 active:scale-95 transition-all cursor-pointer" 
-                 onClick={cerrarSesion}>
+                    className="absolute flex left-6 bottom-5 items-center hover:scale-110 active:scale-95 transition-all cursor-pointer"
+                    onClick={cerrarSesion}>
                     <img src="/icons/logout.png" alt="logout" />
                     <span className="font-bold">Cerrar sesion</span>
                 </button>

@@ -18,7 +18,7 @@ function TaskListList() {
     <div className='h-[100vh] w-4/5'>
       <div className='h-1/10'></div>
       <div className='h-9/10 pl-20'>
-        <h2 className='font-bold font-poppins text-[50px] leading-none uppercase'>{lista.nombre}</h2>
+        <h2 className='font-bold font-poppins text-[50px] leading-none uppercase'>{lista?.nombre ? lista.nombre : ""}</h2>
         <ul className=''>
           {tareasLista.map((task) => (
             <TaskItem key={task._id} task={task} />
