@@ -9,6 +9,7 @@ import Welcome from './pages/Welcome';
 import Registro from './pages/Registro';
 import Login from './pages/Login';
 import Calendario from './pages/Calendario';
+import Listas from './pages/Listas';
 import TasksProvider from './context/TasksProvider';
 import UsersProvider from './context/UsersProvider';
 import ListsProvider from './context/ListsProvider';
@@ -84,6 +85,15 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <Calendario/>
+                  </ProtectedRoute>
+                }
+              />
+
+               <Route
+                path='/listas'
+                element={
+                  <ProtectedRoute>
+                    <Listas/>
                   </ProtectedRoute>
                 }
               />
