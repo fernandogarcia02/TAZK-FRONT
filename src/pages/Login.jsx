@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useUsersContext from '../hooks/useUsersContext';
+import { GoogleLogin } from '@react-oauth/google';
+import useTasksContext from '../hooks/useTasksContext';
+import useListsContext from '../hooks/useListsContext';
 
 const Login = () => {
 
@@ -12,10 +15,50 @@ const Login = () => {
     setPassword,
     error,
     setError,
-    manejarLogin
+    manejarLogin,
+    obtenerPerfil
   } = useUsersContext();
+
+  const {refrescarTareas} = useTasksContext();
+  const {imprimirListas} = useListsContext();
   
   const navigate = useNavigate();
+
+  const alTenerExito = async(credentialResponse) =>{
+    try {
+    const tokenGoogle = credentialResponse.credential;
+
+    // Enviamos el token a nuestro servidor de Node.js
+    const respuesta = await fetch('http://localhost:3000/api/usuarios/google', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token: tokenGoogle }),
+    });
+
+    const datos = await respuesta.json();
+
+    if (respuesta.ok) {
+      // 1. Guardamos TU token (el que genera tu backend) en localStorage
+      localStorage.setItem('token_usuario', datos.token);
+      // 2. Redirigimos al usuario a sus listas
+      refrescarTareas();
+      imprimirListas();
+      obtenerPerfil();
+      navigate("/home"); 
+    } else {
+      console.error("Error en el servidor:", datos.mensaje);
+    }
+  } catch (error) {
+    console.error("Error al conectar con el servidor", error);
+  }
+  };
+
+  const alTenerError = () => {
+
+  };
+
 
   return (
     <div className="login-container">
@@ -42,7 +85,12 @@ const Login = () => {
     </div>
   }
 
-      <form onSubmit={manejarLogin}>
+      <form onSubmit={async(e)=>{
+        e.preventDefault();
+        await manejarLogin()
+        refrescarTareas()
+        imprimirListas()
+        obtenerPerfil()}}>
         <input 
           type="email" 
           placeholder="Tu email" 
@@ -58,6 +106,12 @@ const Login = () => {
           required 
         />
         <p>¿No eres miembro aún?<a onClick={()=>navigate('/registro')}>Únete</a></p>
+
+        <GoogleLogin
+          onSuccess={alTenerExito}
+          onError={alTenerError}
+          useOneTap
+        />
         <button type="submit">Entrar</button>
       </form>
     </div>

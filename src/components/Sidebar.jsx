@@ -27,7 +27,14 @@ const Sidebar = () => {
         modalCrearTarea
     } = useTasksContext();
 
-    const urlFoto = perfil?.fotoPerfil ? `http://localhost:3000${perfil.fotoPerfil}` : '/icons/account.png';
+    // 1. Verificamos si existe la foto
+const fotoPerfil = perfil?.fotoPerfil;
+
+    const urlFoto = fotoPerfil 
+    ? (fotoPerfil.startsWith('http') 
+        ? fotoPerfil  // Si empieza con http (Google), usamos la URL tal cual
+        : `http://localhost:3000${fotoPerfil}`) // Si es local, añadimos el dominio del servidor
+    : '/icons/account.png';
 
     const linkStyle = ({ isActive }) => {
         const estiloResaltado = "bg-[#D9D9D9]/50 rounded-xl";

@@ -14,8 +14,7 @@ function useUsers() {
     const navigate = useNavigate();
 
 
-    const Registrar = async (e) => {
-            e.preventDefault();
+    const Registrar = async () => {
             setError('');
             if (password.length < 8) {
                 setError("La password debe incluir al menos 8 caracteres");
@@ -88,7 +87,6 @@ function useUsers() {
         }
 
     const manejarLogin = async (e) => {
-        e.preventDefault(); // Evita que la página se recargue
         setError('');
 
         try {
@@ -122,6 +120,7 @@ function useUsers() {
 
    const cerrarSesion = () =>{
         localStorage.removeItem('token_usuario');
+        setPerfil(null);
         navigate('/welcome');
     };
 

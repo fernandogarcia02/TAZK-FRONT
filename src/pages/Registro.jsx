@@ -1,3 +1,5 @@
+import useListsContext from "../hooks/useListsContext";
+import useTasksContext from "../hooks/useTasksContext";
 import useUsersContext from "../hooks/useUsersContext";
 const Registro = () => {
     const {
@@ -15,8 +17,12 @@ const Registro = () => {
         foto,
         setFoto,
         preview,
-        manejarCambioFoto
+        manejarCambioFoto,
+        obtenerPerfil
     } = useUsersContext();
+
+    const {refrescarTareas} = useTasksContext();
+    const {imprimirListas} = useListsContext();
     
         return(
             <div>
@@ -41,7 +47,13 @@ const Registro = () => {
                     </div>
                 </div>
                 }
-                <form onSubmit={Registrar}>
+                <form onSubmit={async(e)=>{
+                    e.preventDefault();
+                    await Registrar()
+                    refrescarTareas()
+                    imprimirListas()
+                    obtenerPerfil()
+                    }}>
                     <label htmlFor="nombre">Nombre</label>
                     <input 
                     className="border-2"
