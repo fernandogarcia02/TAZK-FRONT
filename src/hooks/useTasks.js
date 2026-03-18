@@ -51,7 +51,7 @@ function useTasks() {
   const refrescarTareas = async () => {
     try {
       const token = localStorage.getItem('token_usuario');
-      const respuesta = await fetch('http://localhost:3000/api/tareas',{
+      const respuesta = await fetch('/api/tareas',{
         headers:{
           'Authorization' : `Bearer ${token}`
         }
@@ -91,7 +91,7 @@ function useTasks() {
       list_id: lista,
       fechaVencimiento: fechaVencimiento
     };
-      const respuesta = await fetch('http://localhost:3000/api/tareas',{
+      const respuesta = await fetch('/api/tareas',{
           method: 'POST',
           headers:{
             'Content-Type' : 'application/json',
@@ -125,7 +125,7 @@ function useTasks() {
       const tarea = items.find(item => item._id === id);
       if(!tarea){throw new Error('error')};
 
-      const respuesta = await fetch(`http://localhost:3000/api/tareas/${id}`,{
+      const respuesta = await fetch(`/api/tareas/${id}`,{
         method: 'PUT',
         headers:{
           'Content-type' : 'application/json',
@@ -148,7 +148,7 @@ function useTasks() {
   const borrarItem = async (id) => {
     try {
       const token = localStorage.getItem('token_usuario');
-      const respuesta = await fetch(`http://localhost:3000/api/tareas/${id}`, {
+      const respuesta = await fetch(`/api/tareas/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -233,7 +233,7 @@ function useTasks() {
         list_id:editarLista,
         fechaVencimiento:editarFechaVencimiento
       }
-      const respuesta = await fetch(`http://localhost:3000/api/tareas/${taskEditar._id}`,{
+      const respuesta = await fetch(`/api/tareas/${taskEditar._id}`,{
         method: 'PUT',
         headers:{
           'Content-type' : 'application/json',

@@ -40,7 +40,7 @@ function Calendario() {
         console.log(nuevaFecha);
 
         try {
-            const respuesta = await fetch(`http://localhost:3000/api/tareas/${task._id}`, {
+            const respuesta = await fetch(`/api/tareas/${task._id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-type': 'application/json',

@@ -29,7 +29,7 @@ function useLists() {
 
             if (!token) return;
 
-            const respuesta = await fetch('http://localhost:3000/api/listas', {
+            const respuesta = await fetch('/api/listas', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ function useLists() {
             const token = localStorage.getItem('token_usuario');
             if(!token) return;
 
-            const respuesta = await fetch(`http://localhost:3000/api/listas/${id}`,{
+            const respuesta = await fetch(`/api/listas/${id}`,{
                 method: 'PUT',
                 headers:{
                     'Content-Type' : 'application/json',
@@ -86,7 +86,7 @@ function useLists() {
             const token = localStorage.getItem('token_usuario');
             if (!token) return;
 
-            const respuesta = await fetch(`http://localhost:3000/api/listas/${id}`,{
+            const respuesta = await fetch(`/api/listas/${id}`,{
                 method: 'DELETE',
                 headers: {
                     'Authorization' : `Bearer ${token}`
@@ -109,7 +109,7 @@ function useLists() {
             if (!token) {
                 return;
             }
-            const respuesta = await fetch('http://localhost:3000/api/listas', {
+            const respuesta = await fetch('/api/listas', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

@@ -45,7 +45,7 @@ function useUsers() {
             }
 
             try {
-                const respuesta = await fetch('http://localhost:3000/api/usuarios/registro',{
+                const respuesta = await fetch('/api/usuarios/registro',{
                     method: 'POST',
                     body: formData
                 });
@@ -59,7 +59,7 @@ function useUsers() {
                 localStorage.setItem('nombre_usuario',datos.usuario.nombre);
 
                 const token = localStorage.getItem('token_usuario');
-                const crearLista = await fetch('http://localhost:3000/api/listas',{
+                const crearLista = await fetch('/api/listas',{
                     method: 'POST',
                     headers: { 
                         'Content-Type' : 'application/json',
@@ -86,11 +86,11 @@ function useUsers() {
             }
         }
 
-    const manejarLogin = async (e) => {
-        setError('');
+   const manejarLogin = async () => { // Quitamos el (e) de aquí si ya lo controlas en el form
+    setError('');
 
-        try {
-        const respuesta = await fetch('http://localhost:3000/api/usuarios/login', {
+    try {
+        const respuesta = await fetch('/api/usuarios/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
@@ -99,28 +99,31 @@ function useUsers() {
         const data = await respuesta.json();
 
         if (respuesta.ok) {
-            // 1. Guardamos el token en el cofre (localStorage)
             localStorage.setItem('token_usuario', data.token);
-            localStorage.setItem('nombre_usuario',data.usuario.nombre);
-
-            await obtenerPerfil();
+            localStorage.setItem('nombre_usuario', data.usuario.nombre);
 
             limpiarFormulario();
-            
-            // 2. ¡Saltamos a la aplicación!
             navigate('/home');
+            
+            return true; // <--- AGREGADO: Éxito
         } else {
-            // Mostramos el error que viene del backend (ej: "Contraseña incorrecta")
             setError(data.mensaje || 'Error al iniciar sesión');
+            console.log("asaaaaaaa")
+            limpiarFormulario();
+            return false; // <--- AGREGADO: Fallo
         }
-        } catch (err) {
+    } catch (err) {
         setError('No se pudo conectar con el servidor');
-        }
-  };
+        console.log("asaaaa")
+        limpiarFormulario();
+        return false; // <--- AGREGADO: Error de red
+    }
+};
 
    const cerrarSesion = () =>{
         localStorage.removeItem('token_usuario');
         setPerfil(null);
+        limpiarFormulario();
         navigate('/welcome');
     };
 
@@ -158,7 +161,6 @@ function useUsers() {
     setPassword2('');
     setFoto(null);
     setPreview(null);
-    setError('');
 };
 
     const obtenerPerfil = async()=>{
@@ -168,7 +170,7 @@ function useUsers() {
             return;
         }
         try {
-            const respuesta = await fetch('http://localhost:3000/api/usuarios',{
+            const respuesta = await fetch('/api/usuarios',{
                 method: 'GET',
                 headers: {'Authorization' : `Bearer ${token}`}
             });
