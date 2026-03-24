@@ -26,6 +26,8 @@ function useTasks() {
 
   const [abrirCrearTarea, setAbrirCrearTarea] = useState(false);
 
+  const [error, setError] = useState('');
+
   const navigate = useNavigate();
 
 
@@ -297,7 +299,9 @@ function useTasks() {
     fechaVencimiento,
     setFechaVencimiento,
     fechaHoy,
-    refrescarTareas
+    refrescarTareas,
+    error,
+    setError
   };
 }
 

@@ -1,27 +1,32 @@
-.tarea-base{
+/* --- VARIABLES Y FUENTES --- */
+.fc {
+    font-family: 'Inter', sans-serif !important; /* Asegúrate de tener Inter cargada */
+}
+
+/* --- ESTILOS DE TAREAS (EVENTOS) --- */
+.tarea-base {
     background-color: #007011;
-    border: none;
+    border: none !important;
+    border-radius: 4px !important;
+    padding: 2px 4px !important;
+    cursor: pointer;
 }
 
-/* 1. COMPLETADAS: Tachado y opacidad */
+/* 1. COMPLETADAS */
 .tarea-completada {
-    opacity: 0.7 !important;
-}
-
-/* Apuntamos al título y al contenedor del tiempo de FullCalendar */
-.tarea-completada .fc-event-title, 
-.tarea-completada .fc-event-main,
-.tarea-completada .fc-event-time {
-    text-decoration: line-through !important;
-    color: #374151 !important; /* Un gris oscuro */
-}
-
-.tarea-completada {
+    opacity: 0.6 !important;
     background-color: #4ade8055 !important;
     border: none !important;
 }
 
-/* 2. IMPORTANTES: Fondo rojo brillante */
+.tarea-completada .fc-event-title, 
+.tarea-completada .fc-event-main,
+.tarea-completada .fc-event-time {
+    text-decoration: line-through !important;
+    color: #374151 !important;
+}
+
+/* 2. IMPORTANTES */
 .tarea-importante {
     background-color: #ef4444 !important;
     border: none !important;
@@ -32,7 +37,7 @@
     color: white !important;
 }
 
-/* 3. VENCIDAS: Amarillo */
+/* 3. VENCIDAS */
 .tarea-vencida {
     background-color: #facc15 !important;
     border: 1px solid #a16207 !important;
@@ -40,74 +45,114 @@
 
 .tarea-vencida .fc-event-main,
 .tarea-vencida .fc-event-title {
-    color: #422006 !important; /* Texto oscuro para contraste */
+    color: #422006 !important;
 }
 
-
-/* Quitar el fondo, bordes y sombras a todos los botones del header */
-.fc .fc-button {
-    background-color: transparent !important;
-    border: none !important;
-    color: #007011 !important;
-    box-shadow: none !important;
-    transition: all 0.2s ease;
-    text-transform: capitalize; /* "hoy" -> "Hoy" */
-    font-weight: 600;
-}
-
-.fc .fc-button:hover{
-    background-color: color-mix(in srgb, currentColor, transparent 85%) !important;
-}
-
-/* 1. Aplicar Inter a todo el calendario por defecto */
-.fc {
-    font-family: var(--font-inter) !important;
-}
-
-/* 2. Aplicar Poppins solo al título (Mes y Año) */
+/* --- HEADER Y BOTONES DEL CALENDARIO --- */
 .fc .fc-toolbar-title {
-    font-family: var(--font-poppins) !important;
+    font-family: 'Poppins', sans-serif !important;
     color: #007011 !important;
     font-weight: bold !important;
     font-size: 1.8rem !important;
     text-transform: capitalize;
 }
 
-/* 3. Opcional: Si quieres que los números de los días 
-      también tengan un toque diferente */
-.fc .fc-daygrid-day-number {
-    font-family: var(--font-inter);
-    font-weight: 500;
+.fc .fc-button {
+    background-color: transparent !important;
+    border: none !important;
+    color: #007011 !important;
+    box-shadow: none !important;
+    transition: all 0.2s ease;
+    text-transform: capitalize;
+    font-weight: 600;
 }
 
-/* 1. Aseguramos que el contenedor sea el marco de referencia */
-.calendar-custom-container {
-    position: relative;
+.fc .fc-button:hover {
+    background-color: rgba(0, 112, 17, 0.1) !important;
 }
 
-/* 2. Posicionamos el select exactamente a la altura del header */
+/* Estado activo de los botones (cuando se pulsan) */
+.fc .fc-button-primary:not(:disabled):active, 
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+    background-color: #007011 !important;
+    color: white !important;
+}
+
+/* --- SELECTOR DE VISTA (CUSTOM SELECT) --- */
+/* Eliminamos el position absolute para que no choque con el título */
 .custom-select-wrapper {
-    position: absolute;
-    right: 0;
-    top: 0;
-    /* Esta altura debe coincidir con la altura del toolbar de FullCalendar 
-       para que se vea alineado verticalmente con las flechas */
-    height: 40px; 
     display: flex;
     align-items: center;
-    
+    margin-bottom: 10px;
 }
 
-/* 4. Estilo del select para que combine con los botones de 'Hoy' y flechas */
 .custom-select-wrapper select {
-    font-family: var(--font-inter);
-    padding: 5px 10px;
+    font-family: 'Inter', sans-serif;
+    padding: 6px 12px;
     font-size: 14px;
     color: #007011;
+    border: 1px solid #007011;
+    border-radius: 8px;
+    background-color: white;
     cursor: pointer;
     outline: none;
+    transition: all 0.2s;
 }
 
-.fc .fc-day-today{
-    background-color: rgba(0, 112, 17, 0.15) !important;
+.custom-select-wrapper select:hover {
+    background-color: #007011;
+    color: white;
+}
+
+/* --- AJUSTES DE CELDAS --- */
+.fc .fc-day-today {
+    background-color: rgba(0, 112, 17, 0.1) !important;
+}
+
+.fc .fc-daygrid-day-number {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    padding: 4px !important;
+}
+
+/* Fuerza la visibilidad del contenido del calendario en pantallas pequeñas */
+@media (max-width: 768px) {
+    /* Si el calendario desaparece, es porque el scroll del padre lo oculta */
+    .calendar-container {
+        overflow: visible !important;
+    }
+
+    /* Ajuste para los botones del header en móvil para que no se encimen */
+    .fc .fc-toolbar {
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 10px !important;
+    }
+
+    .fc .fc-toolbar-chunk {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    /* Hacemos que el título sea más pequeño para que quepa en una línea */
+    .fc .fc-toolbar-title {
+        font-size: 1.1rem !important;
+        text-align: center;
+    }
+
+    /* Aumentamos el tamaño de la celda en vista de día para que sea fácil clickear */
+    .fc-v-event {
+        min-height: 30px !important;
+    }
+
+    /* Asegura que el calendario ocupe espacio visual */
+    .fc-view-harness {
+        min-height: 450px !important;
+    }
+}
+
+/* Evitar que el select sea demasiado pequeño para el dedo */
+.custom-select-wrapper select {
+    min-height: 40px;
 }

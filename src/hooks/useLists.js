@@ -129,6 +129,27 @@ function useLists() {
         }
     }
 
+    const comprobarListas = async () => {
+        try {
+            const token = localStorage.getItem('token_usuario');
+            if(!token) return;
+            const respuesta = await fetch('/api/listas',{
+                headers: {
+                    'Authorization' : `Bearer ${token}`
+                }
+            });
+
+            const datos =  await respuesta.json();
+
+            if(datos.length === 0){
+                return true;
+            } 
+            return false;
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     useEffect(() => {
         const token = localStorage.getItem('token_usuario');
         if (!token) {
@@ -174,7 +195,8 @@ function useLists() {
         setModalEditarLista,
         listaAEditar,
         setListaAEditar,
-        editarList
+        editarList,
+        comprobarListas
     };
 }
 

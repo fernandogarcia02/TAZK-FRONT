@@ -8,23 +8,22 @@ import Sidebar from "../components/Sidebar";
 import TaskModal from "../components/TaskModal";
 import CrearLista from "../components/CrearLista";
 import TaskForm from '../components/TaskForm';
+import Error from "../components/Error";
 import '../assets/styles/calendario.css'
 
 function Calendario() {
     const calendarRef = useRef(null);
-    const { items, modalAbierto, abrirCrearTarea, setFechaVencimiento, modalCrearTarea, abrirModal, refrescarTareas } = useTasksContext();
+    const { items, modalAbierto, abrirCrearTarea, setFechaVencimiento, modalCrearTarea, abrirModal, refrescarTareas,error } = useTasksContext();
     const { modalCrearLista } = useListsContext();
 
     const handleChangeView = (e) => {
         const viewName = e.target.value;
-        const calendarApi = calendarRef.current.getApi(); // Obtenemos la API
-        calendarApi.changeView(viewName); // Cambiamos la vista
+        const calendarApi = calendarRef.current.getApi();
+        calendarApi.changeView(viewName);
     };
 
     const handleDateClick = (arg) => {
-        const fechaSeleccionada = arg.dateStr;
-
-        setFechaVencimiento(fechaSeleccionada);
+        setFechaVencimiento(arg.dateStr);
         modalCrearTarea();
     }
 
@@ -37,7 +36,6 @@ function Calendario() {
         const task = arg.event.extendedProps;
         const nuevaFecha = arg.event.startStr;
         const token = localStorage.getItem('token_usuario');
-        console.log(nuevaFecha);
 
         try {
             const respuesta = await fetch(`/api/tareas/${task._id}`, {
@@ -48,12 +46,7 @@ function Calendario() {
                 },
                 body: JSON.stringify({ fechaVencimiento: nuevaFecha })
             });
-
-            if (!respuesta.ok) {
-                throw new Error("error al mover la tarea");
-
-            }
-
+            if (!respuesta.ok) throw new Error("error al mover la tarea");
             refrescarTareas();
         } catch (error) {
             arg.revert();
@@ -61,67 +54,59 @@ function Calendario() {
         }
     }
 
-    //Trasformamos las tareas en el formato para la libreria
-
     const eventos = items.map(task => {
         const hoy = new Date().toISOString().split('T')[0];
         const fechaTarea = task.fechaVencimiento ? task.fechaVencimiento.split('T')[0] : null;
-
         let clases = "tarea-base";
-
-        if (task.completed) {
-            clases += " tarea-completada";
-        }
-
-        if (task.priority && !task.completed) {
-            clases += " tarea-importante";
-        }
-
-        if (fechaTarea && fechaTarea < hoy && !task.completed) {
-            clases += " tarea-vencida";
-        }
-
+        if (task.completed) clases += " tarea-completada";
+        if (task.priority && !task.completed) clases += " tarea-importante";
+        if (fechaTarea && fechaTarea < hoy && !task.completed) clases += " tarea-vencida";
 
         return {
             id: task._id,
             title: task.text,
             start: task.fechaVencimiento ? task.fechaVencimiento.split('T')[0] : null,
             className: clases,
-            extendedProps: { ...task } //guardamos toda la info por si la necesitamos 
+            extendedProps: { ...task }
         }
-
     });
 
-    return (
-        // Usamos h-screen para que el contenedor mida exactamente la pantalla
-        <div className='bg-white h-screen w-full flex overflow-visible'>
+   return (
+        <div className='bg-white min-h-[100dvh] w-full flex flex-col md:flex-row overflow-x-hidden'>
             <Sidebar />
 
-            {/* El contenedor ahora es flex-col para repartir el alto */}
-            <div className="calendar-container w-4/5 flex flex-col p-4">
+            {/* Cambiamos h-screen por min-h-0 para que flex-1 funcione correctamente */}
+            <div className="flex-1 flex flex-col p-2 md:p-6 min-h-0 overflow-hidden">
+                
+                {/* Espaciador superior para móvil */}
+                <div className="h-16 md:h-8 shrink-0"></div>
 
-                {/* Espaciador del 10% usando clases arbitrarias de Tailwind */}
-                <div className="h-[2%]"></div>
-
-
-
-                {/* Contenedor del calendario al 90% */}
-                <div className="h-[98%] relative calendar-custom-container">
-                    <div className="custom-select-wrapper">
-                        <select onChange={handleChangeView} className="tu-clase-tailwind">
-                            <option value="dayGridMonth">Mes</option>
-                            <option value="dayGridWeek">Semana</option>
-                            <option value="dayGridDay">Día</option>
+                <div className="flex justify-between items-center mb-4 shrink-0 px-2">
+                    <div className="custom-select-wrapper w-full md:w-auto">
+                        <select 
+                            onChange={handleChangeView} 
+                            className="w-full md:w-auto font-inter text-sm text-[#007011] bg-white border border-[#007011] rounded-lg px-2 py-2 outline-none cursor-pointer"
+                        >
+                            <option value="dayGridMonth">Vista Mes</option>
+                            <option value="dayGridWeek">Vista Semana</option>
+                            <option value="dayGridDay">Vista Día</option>
                         </select>
                     </div>
+                </div>
+
+                {/* Este contenedor es el que fallaba: le damos un min-h en móvil */}
+                <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-100 p-1 md:p-2 min-h-[500px] md:min-h-0">
                     <FullCalendar
                         ref={calendarRef}
                         plugins={[dayGridPlugin, interactionPlugin]}
-                        initialView="dayGridMonth"
-                        height="100%" // <--- ESTO ES CLAVE para que no haga scroll
+                        initialView={window.innerWidth < 768 ? "dayGridDay" : "dayGridMonth"}
+                        height="100%" 
                         locale="es"
-                        aspectRatio={1}
-                        dragScroll={true}
+                        /* Ajustamos el ratio para que en móvil sea más vertical */
+                        aspectRatio={window.innerWidth < 768 ? 0.5 : 1.5}
+                        handleWindowResize={true}
+                        expandRows={true}
+                        stickyHeaderDates={true}
                         firstDay={1}
                         events={eventos}
                         editable={true}
@@ -131,22 +116,17 @@ function Calendario() {
                         headerToolbar={{
                             left: 'prev,next today',
                             center: 'title',
-                            right: 'customSelect'
+                            right: '' 
                         }}
-                        buttonText={{
-                            today: 'Hoy',
-                            month: 'Mes',
-                            week: 'Semana',
-                            day: 'Día'
-                        }}
+                        buttonText={{ today: 'Hoy' }}
                     />
                 </div>
             </div>
-            {abrirCrearTarea && (
-                <TaskForm />
-            )}
+
+            {abrirCrearTarea && <TaskForm />}
             {modalCrearLista && <CrearLista />}
             {modalAbierto && <TaskModal />}
+            {error && <Error/>}
         </div>
     );
 }

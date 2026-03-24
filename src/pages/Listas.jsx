@@ -5,57 +5,79 @@ import TaskModal from "../components/TaskModal";
 import CrearLista from "../components/CrearLista";
 import DeleteModal from "../components/DeleteModal";
 import ListModal from "../components/ListModal";
+import Error from "../components/Error";
 import Sidebar from "../components/Sidebar";
 import { NavLink } from "react-router-dom";
 
-
 function Listas() {
+    const { 
+        listas,
+        setModalEliminarLista,
+        modalEliminarLista, 
+        modalCrearLista,
+        setListaAEliminar,
+        abrirModal,
+        modalEditarLista 
+    } = useListsContext();
+    
+    const { modalAbierto, abrirCrearTarea ,error} = useTasksContext();
 
-    const { listas,setModalEliminarLista,modalEliminarLista, modalCrearLista,setListaAEliminar,abrirModal,modalEditarLista } = useListsContext();
-    const {modalAbierto, abrirCrearTarea} = useTasksContext();
     return (
-        <div className='bg-white min-h-screen w-full flex'>
+        /* Cambiamos flex por flex-col md:flex-row para que en móvil el Sidebar y 
+           el contenido no se peleen por el espacio horizontal */
+        <div className='bg-white min-h-[100dvh] w-full flex flex-col md:flex-row'>
 
-            {abrirCrearTarea && (
-                <TaskForm/>
-            )}
-
-            {modalCrearLista && (
-                <CrearLista/>
-            )}
-            {modalEditarLista && (
-                <ListModal/>
-            )}
-
-            {modalAbierto && (
-                <TaskModal/>
-            )}
-            {modalEliminarLista && (
-                <DeleteModal/>
-            )}
+            {/* Modales - Todos con z-index alto ya configurado */}
+            {abrirCrearTarea && <TaskForm/>}
+            {modalCrearLista && <CrearLista/>}
+            {modalEditarLista && <ListModal/>}
+            {modalAbierto && <TaskModal/>}
+            {error && <Error/>}
+            {modalEliminarLista && <DeleteModal/>}
 
             <Sidebar />
-            <div className="h-[100vh] w-4/5">
-            <div className="h-1/10"></div>
-                <div className="h-9/10 pl-20">
-                <h2 className="font-bold font-poppins text-[50px] leading-none">LISTAS</h2>
+
+            {/* Contenido Principal: w-full en móvil, w-4/5 en escritorio */}
+            <div className="min-h-screen w-full md:w-4/5 flex flex-col">
                 
-                    <ul>
+                {/* Espaciador superior para el botón de menú móvil */}
+                <div className="h-20 md:h-1/10 shrink-0"></div>
+                
+                {/* Padding: px-6 en móvil para que las listas respiren, pl-20 en escritorio */}
+                <div className="flex-1 px-6 md:pl-20 md:pr-10">
+                    <h2 className="font-bold font-poppins text-center md:text-left text-3xl md:text-[50px] leading-none text-[#007011]">
+                        LISTAS
+                    </h2>
+                
+                    <ul className="mt-6 pb-10">
                         {listas.map((lista) => (
                             <li 
-                            className="flex items-center justify-between py-6 border-b mr-20"
-                            key={lista._id}>
-                                <NavLink to={`/lista/${lista._id}`} className="text-[20px] cursor-pointer hover:scale-105 active:scale-95 transition-all font-inter">{lista.nombre}</NavLink>
-                                <div className="">
+                                className="flex items-center justify-between py-5 md:py-6 border-b border-gray-400 mr-0 md:mr-20"
+                                key={lista._id}
+                            >
+                                <NavLink 
+                                    to={`/lista/${lista._id}`} 
+                                    className="text-lg md:text-[20px] cursor-pointer hover:text-[#007011] transition-all font-inter truncate pr-4"
+                                >
+                                    {lista.nombre}
+                                </NavLink>
+                                
+                                <div className="flex items-center shrink-0">
                                     <button 
-                                    onClick={ () =>{
-                                        abrirModal(lista);}}
-                                    className="px-3 cursor-pointer hover:scale-105 transition-all active:scale-95"><img src="/icons/edit.png" alt="Editar" /></button>
+                                        onClick={() => abrirModal(lista)}
+                                        className="p-2 cursor-pointer hover:scale-110 transition-all active:scale-90"
+                                    >
+                                        <img src="/icons/edit.png" alt="Editar" className="w-5 h-5 md:w-auto" />
+                                    </button>
                                     <button 
-                                    onClick={()=>{
-                                        setListaAEliminar(lista._id);
-                                        setModalEliminarLista(true)}}
-                                    className="cursor-pointer hover:scale-105 active:scale-95 transition-all"><img src="/icons/delete.png" alt="Eliminar" /></button>
+                                        onClick={() => {
+                                            setListaAEliminar(lista._id);
+                                            setModalEliminarLista(true);
+                                        }}
+                                        className="p-2 cursor-pointer hover:scale-110 active:scale-90 transition-all"
+                                    >
+                                        <img src="/icons/delete.png" alt="Eliminar" className="w-5 h-5 md:w-auto" />
+                                    </button>
                                 </div>
                             </li>
                         ))}
@@ -63,8 +85,7 @@ function Listas() {
                 </div>
             </div>
         </div>
-    )
-
+    );
 }
 
-export default Listas
+export default Listas;

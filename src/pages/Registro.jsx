@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import useListsContext from "../hooks/useListsContext";
 import useTasksContext from "../hooks/useTasksContext";
 import useUsersContext from "../hooks/useUsersContext";
+import Error from "../components/Error";
 
 const Registro = () => {
     const {
@@ -37,15 +38,7 @@ const Registro = () => {
             />
 
             {error &&
-                <div className="fixed top-5 left-1/2 -translate-x-1/2 z-[100] w-[90%] max-w-sm">
-                    <div className="bg-red-600 text-white p-4 rounded-lg shadow-2xl border-l-4 border-red-800 flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                            <span className="text-xl">⚠️</span>
-                            <p className="font-medium text-sm md:text-base">{error}</p>
-                        </div>
-                        <button onClick={() => setError('')} className="ml-4 hover:text-red-200 transition">✕</button>
-                    </div>
-                </div>
+                <Error/>
             }
 
             <form

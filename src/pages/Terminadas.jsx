@@ -5,6 +5,7 @@ import TaskModal from '../components/TaskModal';
 import useTasksContext from '../hooks/useTasksContext';
 import useListsContext from '../hooks/useListsContext.js';
 import Sidebar from '../components/Sidebar.jsx';
+import Error from '../components/Error.jsx';
 
 
 
@@ -13,7 +14,8 @@ const Terminadas = () =>{
     // Hook
   const {
     modalAbierto,
-    abrirCrearTarea
+    abrirCrearTarea,
+    error
     
   } = useTasksContext();
   const {modalCrearLista} = useListsContext();
@@ -35,6 +37,9 @@ const Terminadas = () =>{
 
       {modalAbierto && (
       <TaskModal/>
+      )}
+      {error && (
+        <Error/>
       )}
     </div>
     )

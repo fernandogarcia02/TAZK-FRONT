@@ -4,6 +4,7 @@ import CrearLista from '../components/CrearLista.jsx';
 import TaskModal from '../components/TaskModal';
 import useTasksContext from '../hooks/useTasksContext';
 import useListsContext from '../hooks/useListsContext.js';
+import Error from '../components/Error.jsx';
 import Sidebar from '../components/Sidebar.jsx';
 
 
@@ -13,7 +14,8 @@ const Proximas = () =>{
     // Hook
   const {
     modalAbierto,
-    abrirCrearTarea
+    abrirCrearTarea,
+    error
     
   } = useTasksContext();
   const {modalCrearLista} = useListsContext();
@@ -35,6 +37,9 @@ const Proximas = () =>{
 
       {modalAbierto && (
       <TaskModal/>
+      )}
+      {error && (
+        <Error/>
       )}
     </div>
     )
