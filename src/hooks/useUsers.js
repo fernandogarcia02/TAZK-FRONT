@@ -10,12 +10,14 @@ function useUsers() {
     const [foto,setFoto] = useState(null);
     const [preview,setPreview] = useState(null);
     const [error, setError] = useState('');
+    const [exito, setExito] = useState('');
     const [perfil,setPerfil] = useState(null);
     const navigate = useNavigate();
 
 
     const Registrar = async () => {
             setError('');
+            setExito('');
             if (password.length < 8) {
                 setError("La password debe incluir al menos 8 caracteres");
                 return;
@@ -55,34 +57,35 @@ function useUsers() {
                     return;
                 }
 
-                localStorage.setItem('token_usuario', datos.token);
-                localStorage.setItem('nombre_usuario',datos.usuario.nombre);
+                // localStorage.setItem('token_usuario', datos.token);
+                // localStorage.setItem('nombre_usuario',datos.usuario.nombre);
 
-                const token = localStorage.getItem('token_usuario');
-                const crearLista = await fetch('/api/listas',{
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type' : 'application/json',
-                        'Authorization' : `Bearer ${token}`
-                    },
-                    body: JSON.stringify({nombre:'Personal'})
-                });
+                // const token = localStorage.getItem('token_usuario');
+                // const crearLista = await fetch('/api/listas',{
+                //     method: 'POST',
+                //     headers: { 
+                //         'Content-Type' : 'application/json',
+                //         'Authorization' : `Bearer ${token}`
+                //     },
+                //     body: JSON.stringify({nombre:'Personal'})
+                // });
 
-                const res = await crearLista.json();
+                // const res = await crearLista.json();
 
-                await obtenerPerfil();
+                // await obtenerPerfil();
 
 
                 limpiarFormulario();
 
-                if (crearLista.ok) {
-                    navigate('/home');
-                }else{
-                    setError(res.mensaje);
-                }
+                setExito("Registro exitoso. Por favor, revisa tu email para activar tu cuenta.");
+
+                setTimeout(() => {
+                    navigate('/login');
+                }, 5000);
                     
             } catch (error) {
-                setError(error.mensaje || "Error al crear el usuario");
+                console.error(error);
+                setError("Error al crear el usuario");
             }
         }
 
@@ -213,7 +216,9 @@ function useUsers() {
         foto,
         setFoto,
         preview,
-        manejarCambioFoto
+        manejarCambioFoto,
+        exito,
+        setExito
     }
 }
 

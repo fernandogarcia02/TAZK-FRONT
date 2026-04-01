@@ -73,7 +73,9 @@ const Login = () => {
       />
 
       {error && (
-        <Error/>
+        <Error
+        mensaje={error}
+        cerrar={()=>setError('')}/>
       )}
 
       <form

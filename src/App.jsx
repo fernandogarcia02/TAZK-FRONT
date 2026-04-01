@@ -14,6 +14,7 @@ import TasksProvider from './context/TasksProvider';
 import UsersProvider from './context/UsersProvider';
 import ListsProvider from './context/ListsProvider';
 import './App.css';
+import ConfirmarCuenta from './pages/ConfirmarCuenta';
 
 const RootRedirect = () => {
   const token = localStorage.getItem('token_usuario');
@@ -96,6 +97,11 @@ function App() {
                     <Listas/>
                   </ProtectedRoute>
                 }
+              />
+
+              <Route
+              path='/confirmar/:token'
+              element={<ConfirmarCuenta/>}
               />
               
             </Routes>

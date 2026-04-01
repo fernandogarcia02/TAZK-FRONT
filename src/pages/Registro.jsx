@@ -3,6 +3,7 @@ import useListsContext from "../hooks/useListsContext";
 import useTasksContext from "../hooks/useTasksContext";
 import useUsersContext from "../hooks/useUsersContext";
 import Error from "../components/Error";
+import Exito from "../components/Exito";
 
 const Registro = () => {
     const {
@@ -16,6 +17,8 @@ const Registro = () => {
         setPassword2,
         error,
         setError,
+        exito,
+        setExito,
         Registrar,
         foto,
         preview,
@@ -37,26 +40,34 @@ const Registro = () => {
                 onClick={() => navigate("/welcome")}
             />
 
-            {error &&
-                <Error/>
-            }
+            {exito &&
+                <Exito 
+                    mensaje={exito}
+                    cerrar={()=>setExito('')}
+                />}
+
+            {error && (
+                <Error
+                    mensaje={error}
+                    cerrar={() => setError('')} />
+            )}
 
             <form
                 className="relative bg-[#007011] w-full max-w-[450px] md:max-w-[700px] h-auto md:h-[850px] rounded-[30px] md:rounded-[50px] flex flex-col items-center mt-10 md:mt-0 pt-24 pb-12 md:pt-40 shadow-2xl"
                 onSubmit={async (e) => {
                     e.preventDefault();
                     await Registrar();
-                    refrescarTareas();
-                    imprimirListas();
-                    obtenerPerfil();
+                    // refrescarTareas();
+                    // imprimirListas();
+                    // obtenerPerfil();
                 }}>
-                
+
                 <h2 className='absolute top-8 md:top-10 font-poppins font-bold text-white text-[24px] md:text-[30px]'>
                     Registrarse
                 </h2>
 
                 <div className="flex flex-col gap-6 md:gap-8 w-full px-6 md:px-0 items-center">
-                    
+
                     {/* Nombre */}
                     <div className="flex flex-col md:flex-row md:items-center w-full md:w-[550px] gap-2">
                         <label className='font-inter text-[16px] md:text-[20px] text-white font-bold md:w-40 text-left md:text-right md:pr-4' htmlFor="nombre">Nombre</label>
@@ -67,7 +78,7 @@ const Registro = () => {
                             value={nombre}
                             required
                             placeholder="Nombre"
-                            onChange={(e) => setNombre(e.target.value)} 
+                            onChange={(e) => setNombre(e.target.value)}
                         />
                     </div>
 
@@ -81,7 +92,7 @@ const Registro = () => {
                             value={email}
                             placeholder="Email"
                             required
-                            onChange={(e) => setEmail(e.target.value)} 
+                            onChange={(e) => setEmail(e.target.value)}
                         />
                     </div>
 
@@ -95,7 +106,7 @@ const Registro = () => {
                             value={password}
                             placeholder="Contraseña"
                             required
-                            onChange={(e) => setPassword(e.target.value)} 
+                            onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
 
@@ -109,7 +120,7 @@ const Registro = () => {
                             value={password2}
                             placeholder="Confirmar contraseña"
                             required
-                            onChange={(e) => setPassword2(e.target.value)} 
+                            onChange={(e) => setPassword2(e.target.value)}
                         />
                     </div>
 
@@ -144,8 +155,8 @@ const Registro = () => {
                     </div>
                 </div>
 
-                <button 
-                    type="submit" 
+                <button
+                    type="submit"
                     className="mt-10 md:absolute md:bottom-10 text-white border border-white bg-[#7B9F7D] rounded-full p-3 w-[200px] hover:scale-110 transition-transform cursor-pointer active:scale-95 font-inter font-bold"
                 >
                     Crear cuenta

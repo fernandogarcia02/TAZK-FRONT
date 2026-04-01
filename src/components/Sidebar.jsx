@@ -122,7 +122,7 @@ const Sidebar = () => {
                     </button>
 
                     <button
-                        className="absolute flex left-6 bottom-5 items-center hover:scale-105 transition-all text-white"
+                        className="absolute flex left-6 bottom-5 items-center hover:scale-105 transition-all text-white cursor-pointer"
                         onClick={cerrarSesion}>
                         <img src="/icons/logout.png" alt="logout" className="" />
                         <span className="font-bold pl-2">Cerrar sesión</span>
