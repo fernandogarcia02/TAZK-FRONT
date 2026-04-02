@@ -5,6 +5,7 @@ import { GoogleLogin } from '@react-oauth/google';
 import useTasksContext from '../hooks/useTasksContext';
 import useListsContext from '../hooks/useListsContext';
 import Error from '../components/Error';
+import Exito from '../components/Exito';
 
 const Login = () => {
   const {
@@ -14,6 +15,8 @@ const Login = () => {
     setPassword,
     error,
     setError,
+    exito,
+    setExito,
     manejarLogin,
     obtenerPerfil
   } = useUsersContext();
@@ -77,6 +80,11 @@ const Login = () => {
         mensaje={error}
         cerrar={()=>setError('')}/>
       )}
+      {exito && (
+        <Exito 
+        mensaje={exito}
+        cerrar={()=>setExito('')}/>
+      )}
 
       <form
         className='bg-[#007011] w-full max-w-[450px] md:max-w-[800px] h-auto md:h-[750px] rounded-[30px] md:rounded-[50px] flex flex-col pt-24 pb-12 md:pt-40 items-center relative shadow-2xl'
@@ -130,7 +138,7 @@ const Login = () => {
 
         {/* Links aligned with inputs */}
         <div className='flex justify-between w-full max-w-[350px] md:pl-4 py-4 px-8 md:px-0'>
-          <a className='text-blue-400 text-[12px] md:text-sm font-bold font-inter cursor-pointer hover:underline' href="">¿Has olvidado tu contraseña?</a>
+          <a className='text-blue-400 text-[12px] md:text-sm font-bold font-inter cursor-pointer hover:underline' onClick={()=>navigate('/olvide-password')}>¿Has olvidado tu contraseña?</a>
           <a className='text-blue-400 text-[12px] md:text-sm font-bold font-inter cursor-pointer hover:underline' onClick={() => navigate('/registro')}>Únete</a>
         </div>
 

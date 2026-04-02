@@ -7,6 +7,8 @@ import Importantes from './pages/Importantes';
 import Lista from './pages/Lista';
 import Welcome from './pages/Welcome';
 import Registro from './pages/Registro';
+import OlvidePassword from './pages/OlvidePassword';
+import RestablecerPassword from './pages/RestablecerPassword';
 import Login from './pages/Login';
 import Calendario from './pages/Calendario';
 import Listas from './pages/Listas';
@@ -35,6 +37,10 @@ function App() {
               <Route path="/welcome" element={<Welcome />} />
               <Route path="/login" element={<Login />} />
               <Route path="/registro" element={<Registro/>}/>
+              <Route path="/olvide-password" element={<OlvidePassword/>}/>
+              <Route path="/olvide-password/:token" element={<RestablecerPassword/>}/>
+
+
 
               <Route 
                 path="/home" 
