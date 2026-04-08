@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import useUsersContext from '../hooks/useUsersContext';
 import useListsContext from '../hooks/useListsContext';
 import useTasksContext from '../hooks/useTasksContext';
+import { API_URL } from '../config/urls';
 
 const ConfirmarCuenta = () => {
     const [confirmado, setConfirmado] = useState(false);
@@ -15,11 +16,14 @@ const ConfirmarCuenta = () => {
     const {imprimirListas} = useListsContext();
     const {refrescarTareas} = useTasksContext();
 
+    useEffect(() => {
+            document.title = "Confirmar Cuenta - TAZK";
+        }, []);
 
     useEffect(() => {
         const confirmarCuenta = async () => {
             try {
-                const url = `/api/usuarios/confirmar/${token}`;
+                const url = `${API_URL}/usuarios/confirmar/${token}`;
                 const respuesta = await fetch(url);
                 const data = await respuesta.json();
 

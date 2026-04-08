@@ -6,6 +6,7 @@ import useTasksContext from '../hooks/useTasksContext';
 import useListsContext from '../hooks/useListsContext.js';
 import Error from '../components/Error.jsx';
 import Sidebar from '../components/Sidebar.jsx';
+import { useEffect } from 'react';
 
 
 
@@ -19,6 +20,11 @@ const Importantes = () =>{
     
   } = useTasksContext();
   const {modalCrearLista} = useListsContext();
+  useEffect(() => {
+          document.title = "Importantes - TAZK";
+      }, []);
+      
+
     return (
         <div className='bg-white min-h-screen w-full flex'>
 

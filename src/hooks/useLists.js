@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from '../config/urls';
+
 
 function useLists() {
     const [listas, setListas] = useState([]);
@@ -29,7 +31,7 @@ function useLists() {
 
             if (!token) return;
 
-            const respuesta = await fetch('/api/listas', {
+            const respuesta = await fetch(`${API_URL}/listas`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -58,7 +60,7 @@ function useLists() {
             const token = localStorage.getItem('token_usuario');
             if(!token) return;
 
-            const respuesta = await fetch(`/api/listas/${id}`,{
+            const respuesta = await fetch(`${API_URL}/listas/${id}`,{
                 method: 'PUT',
                 headers:{
                     'Content-Type' : 'application/json',
@@ -86,7 +88,7 @@ function useLists() {
             const token = localStorage.getItem('token_usuario');
             if (!token) return;
 
-            const respuesta = await fetch(`/api/listas/${id}`,{
+            const respuesta = await fetch(`${API_URL}/listas/${id}`,{
                 method: 'DELETE',
                 headers: {
                     'Authorization' : `Bearer ${token}`
@@ -109,7 +111,7 @@ function useLists() {
             if (!token) {
                 return;
             }
-            const respuesta = await fetch('/api/listas', {
+            const respuesta = await fetch(`${API_URL}/listas`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -133,7 +135,7 @@ function useLists() {
         try {
             const token = localStorage.getItem('token_usuario');
             if(!token) return;
-            const respuesta = await fetch('/api/listas',{
+            const respuesta = await fetch(`${API_URL}/listas`,{
                 headers: {
                     'Authorization' : `Bearer ${token}`
                 }

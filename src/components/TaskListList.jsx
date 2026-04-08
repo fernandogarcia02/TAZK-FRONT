@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import useTasksContext from '../hooks/useTasksContext';
 import TaskItem from './TaskItem';
 import useListsContext from '../hooks/useListsContext';
+import React, { useEffect } from 'react';
 
 function TaskListList() {
   const { items } = useTasksContext();
@@ -13,6 +14,15 @@ function TaskListList() {
   const tareasLista = items.filter((task) => {
     return task.list_id === id;
   });
+
+  useEffect(() => {
+    if (lista?.nombre) {
+      document.title = `${lista.nombre} - TAZK`;
+    } else {
+      document.title = "Lista - TAZK";
+    }
+  }, [lista]);
+  
 
   return (
     /* w-full para móvil y md:w-4/5 para escritorio. 

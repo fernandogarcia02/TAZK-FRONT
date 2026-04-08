@@ -2,12 +2,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import Error from "../components/Error";
 import Exito from "../components/Exito";
 import useUsersContext from "../hooks/useUsersContext";
+import { useEffect } from "react";
 
 const RestablecerPassword = () => {
     const params = useParams();
     const { token } = params;
     const { password, setPassword, password2, setPassword2, cambiarPassword,exito,setExito,error,setError } = useUsersContext();
     const navigate = useNavigate();
+     useEffect(() => {
+            document.title = "Cambiar Contraseña - TAZK";
+        }, []);
 
     return (
         <div className="flex flex-col items-center justify-center min-h-[100dvh] bg-gray-100 px-4">

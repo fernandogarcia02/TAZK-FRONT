@@ -1,7 +1,11 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Welcome = () => {
     const navigate = useNavigate();
+     useEffect(() => {
+            document.title = "TAZK";
+        }, []);
 
     return (
         <div className="relative min-h-screen w-full flex flex-col items-center justify-center bg-[linear-gradient(180deg,_#ffffff_49%,_#999999_94%)] px-6 md:px-10 overflow-hidden">

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import imageCompression from "browser-image-compression";
+import { API_URL } from '../config/urls';
+
 
 function useUsers() {
     const [email, setEmail] = useState('');
@@ -47,7 +49,7 @@ function useUsers() {
         }
 
         try {
-            const respuesta = await fetch('/api/usuarios/registro', {
+            const respuesta = await fetch(`${API_URL}/usuarios/registro`, {
                 method: 'POST',
                 body: formData
             });
@@ -93,7 +95,7 @@ function useUsers() {
         setError('');
 
         try {
-            const respuesta = await fetch('/api/usuarios/login', {
+            const respuesta = await fetch(`${API_URL}/usuarios/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password })
@@ -127,7 +129,7 @@ function useUsers() {
         setExito('');
 
         try {
-            const respuesta = await fetch('/api/usuarios/olvide-password', {
+            const respuesta = await fetch(`${API_URL}/usuarios/olvide-password`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email })
@@ -172,7 +174,7 @@ function useUsers() {
             return;
         }
         try {
-            const respuesta = await fetch(`/api/usuarios/olvide-password/${token}`, {
+            const respuesta = await fetch(`${API_URL}/usuarios/olvide-password/${token}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ password })
@@ -247,7 +249,7 @@ function useUsers() {
             return;
         }
         try {
-            const respuesta = await fetch('/api/usuarios', {
+            const respuesta = await fetch(`${API_URL}/usuarios`, {
                 method: 'GET',
                 headers: { 'Authorization': `Bearer ${token}` }
             });

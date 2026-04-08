@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useUsersContext from '../hooks/useUsersContext';
 import { GoogleLogin } from '@react-oauth/google';
@@ -6,6 +6,8 @@ import useTasksContext from '../hooks/useTasksContext';
 import useListsContext from '../hooks/useListsContext';
 import Error from '../components/Error';
 import Exito from '../components/Exito';
+import { API_URL } from '../config/urls';
+
 
 const Login = () => {
   const {
@@ -20,6 +22,9 @@ const Login = () => {
     manejarLogin,
     obtenerPerfil
   } = useUsersContext();
+   useEffect(() => {
+            document.title = "Login - TAZK";
+        }, []);
 
   const { refrescarTareas } = useTasksContext();
   const { imprimirListas } = useListsContext();
@@ -28,7 +33,7 @@ const Login = () => {
   const alTenerExito = async (credentialResponse) => {
     try {
       const tokenGoogle = credentialResponse.credential;
-      const respuesta = await fetch('/api/usuarios/google', {
+      const respuesta = await fetch(`${API_URL}/usuarios/google`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token: tokenGoogle }),
@@ -38,7 +43,7 @@ const Login = () => {
       if (respuesta.ok) {
         localStorage.setItem('token_usuario', datos.token);
 
-        const checkListas = await fetch('/api/listas',{
+        const checkListas = await fetch(`${API_URL}/listas`,{
           method:'GET',
           headers: {'Authorization' : `Bearer ${datos.token}`}
         });
@@ -46,7 +51,7 @@ const Login = () => {
         const listasActuales = await checkListas.json();
 
         if(listasActuales.length === 0){
-          await fetch('/api/listas',{
+          await fetch(`${API_URL}/listas`,{
             method: 'POST',
             headers: {
               'Content-type' : 'application/json',

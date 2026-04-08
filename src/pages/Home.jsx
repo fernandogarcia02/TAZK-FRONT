@@ -6,6 +6,7 @@ import useTasksContext from '../hooks/useTasksContext';
 import Error from '../components/Error.jsx';
 import Sidebar from '../components/Sidebar.jsx';
 import useListsContext from '../hooks/useListsContext.js';
+import React, { useEffect } from 'react';
 
 
 
@@ -18,6 +19,10 @@ const Home = () =>{
     error,
     setError
   } = useTasksContext();
+
+  useEffect(() => {
+        document.title = "Home - TAZK";
+    }, []);
 
   const {modalCrearLista} = useListsContext();
     return (

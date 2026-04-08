@@ -8,6 +8,7 @@ import ListModal from "../components/ListModal";
 import Error from "../components/Error";
 import Sidebar from "../components/Sidebar";
 import { NavLink } from "react-router-dom";
+import { useEffect } from "react";
 
 function Listas() {
     const { 
@@ -21,6 +22,9 @@ function Listas() {
     } = useListsContext();
     
     const { modalAbierto, abrirCrearTarea ,error} = useTasksContext();
+     useEffect(() => {
+            document.title = "Listas - TAZK";
+        }, []);
 
     return (
         /* Cambiamos flex por flex-col md:flex-row para que en móvil el Sidebar y 

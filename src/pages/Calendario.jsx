@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -10,11 +10,17 @@ import CrearLista from "../components/CrearLista";
 import TaskForm from '../components/TaskForm';
 import Error from "../components/Error";
 import '../assets/styles/calendario.css'
+import { API_URL } from '../config/urls';
+
 
 function Calendario() {
     const calendarRef = useRef(null);
     const { items, modalAbierto, abrirCrearTarea, setFechaVencimiento, modalCrearTarea, abrirModal, refrescarTareas,error } = useTasksContext();
     const { modalCrearLista } = useListsContext();
+
+    useEffect(() => {
+        document.title = "Calendario - TAZK";
+    }, []);
 
     const handleChangeView = (e) => {
         const viewName = e.target.value;
@@ -38,7 +44,7 @@ function Calendario() {
         const token = localStorage.getItem('token_usuario');
 
         try {
-            const respuesta = await fetch(`/api/tareas/${task._id}`, {
+            const respuesta = await fetch(`${API_URL}/tareas/${task._id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-type': 'application/json',

@@ -4,6 +4,7 @@ import useTasksContext from "../hooks/useTasksContext";
 import useUsersContext from "../hooks/useUsersContext";
 import Error from "../components/Error";
 import Exito from "../components/Exito";
+import { useEffect } from "react";
 
 const Registro = () => {
     const {
@@ -29,6 +30,9 @@ const Registro = () => {
     const { refrescarTareas } = useTasksContext();
     const { imprimirListas } = useListsContext();
     const navigate = useNavigate();
+     useEffect(() => {
+            document.title = "Registrarse - TAZK";
+        }, []);
 
     return (
         <div className="min-h-[100vh] w-full flex items-center justify-center p-4">

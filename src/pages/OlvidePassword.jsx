@@ -2,10 +2,14 @@ import Exito from "../components/Exito";
 import Error from "../components/Error";
 import useUsersContext from "../hooks/useUsersContext"
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const OlvidePassword = () => {
     const {email,setEmail,exito,setExito,error,setError,enviarEmailOlvide} = useUsersContext();
     const navigate = useNavigate();
+     useEffect(() => {
+            document.title = "Cambiar Contraseña - TAZK";
+        }, []);
     return(
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
              <img 
