@@ -46,6 +46,7 @@ function TaskForm() {
                 <input type="text"
                     className="font-inter text-lg md:text-xl placeholder:text-white/70 placeholder:font-bold text-white rounded p-3 outline-none focus:bg-white/20 transition-all"
                     value={text}
+                    required
                     onChange={(e) => setText(e.target.value)}
                     placeholder="TÍTULO"
                 />
