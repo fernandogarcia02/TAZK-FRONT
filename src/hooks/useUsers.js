@@ -79,7 +79,7 @@ function useUsers() {
 
             limpiarFormulario();
 
-            setExito("Registro exitoso. Por favor, revisa tu email para activar tu cuenta.");
+            setExito(datos.mensaje);
 
             setTimeout(() => {
                 navigate('/login');
