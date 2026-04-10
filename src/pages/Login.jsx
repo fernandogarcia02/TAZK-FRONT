@@ -7,6 +7,7 @@ import useListsContext from '../hooks/useListsContext';
 import Error from '../components/Error';
 import Exito from '../components/Exito';
 import { API_URL } from '../config/urls';
+import Cargando from '../components/Cargando';
 
 
 const Login = () => {
@@ -20,7 +21,9 @@ const Login = () => {
     exito,
     setExito,
     manejarLogin,
-    obtenerPerfil
+    obtenerPerfil,
+    cargando,
+    setCargando
   } = useUsersContext();
    useEffect(() => {
             document.title = "Login - TAZK";
@@ -31,6 +34,8 @@ const Login = () => {
   const navigate = useNavigate();
 
   const alTenerExito = async (credentialResponse) => {
+
+    setCargando(true);
     try {
       const tokenGoogle = credentialResponse.credential;
       const respuesta = await fetch(`${API_URL}/usuarios/google`, {
@@ -63,9 +68,11 @@ const Login = () => {
         refrescarTareas();
         imprimirListas();
         obtenerPerfil();
+        setCargando(false);
         navigate("/home");
       }
     } catch (error) {
+      setCargando(false);
       console.error("Error al conectar con el servidor", error);
     }
   };
@@ -79,6 +86,10 @@ const Login = () => {
         className="fixed top-6 left-6 md:top-8 md:left-8 h-8 md:h-10 w-auto cursor-pointer z-50"
         onClick={() => navigate("/welcome")}
       />
+
+      {cargando && (
+        <Cargando/>
+      )}
 
       {error && (
         <Error

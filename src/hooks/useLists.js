@@ -14,6 +14,7 @@ function useLists() {
     const [modalEditarLista, setModalEditarLista] = useState(false);
     const [listaAEditar, setListaAEditar] = useState(null);
     const [nuevoNombre, setNuevoNombre] = useState('');
+    const [cargandoLista, setCargandoLista] = useState(false);
 
     const navegar = useNavigate();
 
@@ -25,11 +26,14 @@ function useLists() {
 
     const crearLista = async () => {
         if (!nombreLista.trim()) return;
+        setCargandoLista(true);
 
         try {
             const token = localStorage.getItem('token_usuario');
 
-            if (!token) return;
+            if (!token){
+                setCargandoLista(false);
+                return};
 
             const respuesta = await fetch(`${API_URL}/listas`, {
                 method: 'POST',
@@ -44,21 +48,27 @@ function useLists() {
                 setNombreLista('');
                 imprimirListas();
                 setModalCrearLista(false);
+                setCargandoLista(false);
             } else {
                 const errorMensaje = respuesta.json();
+                setCargandoLista(false);
                 console.error("Error creando la lista:", errorMensaje.mensaje);
             }
         } catch (error) {
+            setCargandoLista(false);
             console.log("Error creando la lista", error);
         }
     }
 
     const editarList = async (id) => {
         if (!nuevoNombre.trim()) return 
+        setCargandoLista(true);
             
         try {
             const token = localStorage.getItem('token_usuario');
-            if(!token) return;
+            if(!token){ 
+                setCargandoLista(false);
+                return};
 
             const respuesta = await fetch(`${API_URL}/listas/${id}`,{
                 method: 'PUT',
@@ -74,19 +84,24 @@ function useLists() {
                 setNuevoNombre('');
                 setListaAEditar(null);
                 setModalEditarLista(false);
+                setCargandoLista(false);
             }else{
-                console.error("error editando la lista")
+                console.error("error editando la lista");
+                setCargandoLista(false);
             }
         } catch (error) {
             console.error(error);
+            setCargandoLista(false);
         }
     }
 
     const eliminarLista = async (id) => {
-
+        setCargandoLista(true);
         try {
             const token = localStorage.getItem('token_usuario');
-            if (!token) return;
+            if (!token){ 
+                setCargandoLista(true);
+                return};
 
             const respuesta = await fetch(`${API_URL}/listas/${id}`,{
                 method: 'DELETE',
@@ -97,8 +112,10 @@ function useLists() {
             imprimirListas();
             setListaAEliminar(null);
             setModalEliminarLista(false);
+            setCargandoLista(false);
         } catch (error) {
-            console.error("Error al borrar", error)
+            console.error("Error al borrar", error);
+            setCargandoLista(false);
         }
 
 
@@ -198,7 +215,9 @@ function useLists() {
         listaAEditar,
         setListaAEditar,
         editarList,
-        comprobarListas
+        comprobarListas,
+        cargandoLista,
+        setCargandoLista
     };
 }
 

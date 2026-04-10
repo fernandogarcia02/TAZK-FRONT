@@ -31,7 +31,7 @@ function Error({mensaje, cerrar}) {
                 </div>
 
                 <button 
-                    onClick={() => {cerrar}} 
+                    onClick={() => {cerrar()}} 
                     className="ml-4 p-2 bg-white/20 rounded-full hover:bg-white/40 transition-colors active:scale-90"
                 >
                     <img src="/icons/close.png" alt="cerrar" className="w-4 h-4 invert" />

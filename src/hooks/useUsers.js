@@ -14,19 +14,23 @@ function useUsers() {
     const [error, setError] = useState('');
     const [exito, setExito] = useState('');
     const [perfil, setPerfil] = useState(null);
+    const [cargando, setCargando] = useState(false);
     const navigate = useNavigate();
 
 
     const Registrar = async () => {
         setError('');
         setExito('');
+        setCargando(true);
         if (password.length < 8) {
             setError("La password debe incluir al menos 8 caracteres");
+            setCargando(false);
             return;
         }
 
         if (password2 !== password) {
             setError("Las passwords no coinciden");
+            setCargando(false);
             return;
         }
         const tieneMayuscula = /[A-Z]/.test(password);
@@ -36,6 +40,7 @@ function useUsers() {
 
         if (!tieneMayuscula || !tieneMinuscula || !tieneNumero || !tieneEspecial) {
             setError("La password debe incluir mayúscula, número y carácter especial");
+            setCargando(false);
             return;
         }
 
@@ -56,6 +61,7 @@ function useUsers() {
             const datos = await respuesta.json();
             if (!respuesta.ok) {
                 setError(datos.mensaje);
+                setCargando(false);
                 return;
             }
 
@@ -78,8 +84,9 @@ function useUsers() {
 
 
             limpiarFormulario();
-
+            setCargando(false);
             setExito(datos.mensaje);
+            
 
             setTimeout(() => {
                 navigate('/login');
@@ -87,12 +94,14 @@ function useUsers() {
 
         } catch (error) {
             console.error(error);
+            setCargando(false);
             setError("Error al crear el usuario");
         }
     }
 
     const manejarLogin = async () => { // Quitamos el (e) de aquí si ya lo controlas en el form
         setError('');
+        setCargando(true);
 
         try {
             const respuesta = await fetch(`${API_URL}/usuarios/login`, {
@@ -108,6 +117,7 @@ function useUsers() {
                 localStorage.setItem('nombre_usuario', data.usuario.nombre);
 
                 limpiarFormulario();
+                setCargando(false);
                 navigate('/home');
 
                 return true; // <--- AGREGADO: Éxito
@@ -115,18 +125,22 @@ function useUsers() {
                 setError(data.mensaje || 'Error al iniciar sesión');
                 console.log("asaaaaaaa")
                 limpiarFormulario();
+                setCargando(false);
                 return false; // <--- AGREGADO: Fallo
             }
         } catch (err) {
             setError('No se pudo conectar con el servidor');
             console.log("asaaaa")
             limpiarFormulario();
+            setCargando(false);
             return false; // <--- AGREGADO: Error de red
         }
     };
     const enviarEmailOlvide = async () => {
         setError('');
         setExito('');
+        setCargando(true);
+        
 
         try {
             const respuesta = await fetch(`${API_URL}/usuarios/olvide-password`, {
@@ -139,15 +153,18 @@ function useUsers() {
             if (!respuesta.ok) {
                 setError(data.mensaje || 'Error al enviar el email');
                 limpiarFormulario();
+                setCargando(false);
                 return;
             } else {
                 setExito(data.mensaje || 'Revisa tu correo');
                 limpiarFormulario();
+                setCargando(false);
                 return;
             }
         } catch (error) {
             setError('No se pudo conectar con el servidor');
             limpiarFormulario();
+            setCargando(false);
             return;
         }
     };
@@ -155,13 +172,16 @@ function useUsers() {
     const cambiarPassword = async (token) => {
         setExito('');
         setError('');
+        setCargando(true);
         if (password.length < 8) {
             setError("La password debe incluir al menos 8 caracteres");
+            setCargando(false);
             return;
         }
 
         if (password2 !== password) {
             setError("Las passwords no coinciden");
+            setCargando(false);
             return;
         }
         const tieneMayuscula = /[A-Z]/.test(password);
@@ -171,6 +191,7 @@ function useUsers() {
 
         if (!tieneMayuscula || !tieneMinuscula || !tieneNumero || !tieneEspecial) {
             setError("La password debe incluir mayúscula, número y carácter especial");
+            setCargando(false);
             return;
         }
         try {
@@ -184,16 +205,19 @@ function useUsers() {
             if (respuesta.ok) {
                 setExito(data.mensaje || 'Contraseña cambiada con éxito');
                 limpiarFormulario();
+                setCargando(false);
                 navigate('/login');
                 return;
             } else {
                 setError(data.mensaje || 'Error al cambiar la contraseña');
+                setCargando(false);
                 limpiarFormulario();
                 return;
             }
         } catch (error) {
             setError('No se pudo conectar con el servidor');
             limpiarFormulario();
+            setCargando(false);
             return;
         }
     };
@@ -296,7 +320,9 @@ function useUsers() {
         exito,
         setExito,
         enviarEmailOlvide,
-        cambiarPassword
+        cambiarPassword,
+        cargando,
+        setCargando
     }
 }
 

@@ -28,6 +28,7 @@ function useTasks() {
   const [abrirCrearTarea, setAbrirCrearTarea] = useState(false);
 
   const [error, setError] = useState('');
+  const [cargandoTarea, setCargandoTarea] = useState(false);
 
   const navigate = useNavigate();
 
@@ -84,6 +85,7 @@ function useTasks() {
 
   const agregarItem = async () => {
     if (text.trim() === '') return;
+    setCargandoTarea(true);
     try {
       const token = localStorage.getItem('token_usuario');
       const nuevaTarea = {
@@ -105,6 +107,7 @@ function useTasks() {
       );
       
       if (!respuesta.ok) {
+        setCargandoTarea(false);
         throw new Error(`Error:${respuesta.status} ${respuesta.statusText}`)
       }
 
@@ -114,8 +117,10 @@ function useTasks() {
       setPrioridad(false);
       setLista('');
       setFechaVencimiento(fechaHoy());
+      setCargandoTarea(false);
     } catch (error) {
       console.error("Error creando tarea",error)  
+      setCargandoTarea(false);
     }
 
   
@@ -123,10 +128,13 @@ function useTasks() {
   };
 
   const toggleCompleted = async (id) => {
+    setCargandoTarea(true);
     try {
       const token = localStorage.getItem('token_usuario');
       const tarea = items.find(item => item._id === id);
-      if(!tarea){throw new Error('error')};
+      if(!tarea){
+        setCargandoTarea(false);
+        throw new Error('error')};
 
       const respuesta = await fetch(`${API_URL}/tareas/${id}`,{
         method: 'PUT',
@@ -138,17 +146,20 @@ function useTasks() {
       }
       );
       if (!respuesta.ok) {
+        setCargandoTarea(false);
         throw new Error(`Error:${respuesta.status} ${respuesta.statusText}`);
       }
-
+      setCargandoTarea(false);
       refrescarTareas();
     } catch (error) {
-      
+      console.error(error);
+      setCargandoTarea(false);
     }
     
   };
 
   const borrarItem = async (id) => {
+    setCargandoTarea(true);
     try {
       const token = localStorage.getItem('token_usuario');
       const respuesta = await fetch(`${API_URL}/tareas/${id}`, {
@@ -159,8 +170,10 @@ function useTasks() {
       }
       );
       if (!respuesta.ok) {
+        setCargandoTarea(false);
         throw new Error(`Error:${respuesta.status} ${respuesta.statusText}`)
       }
+      
       refrescarTareas();
       setModalAbierto(false);
       setTaskEditar(null);
@@ -169,8 +182,10 @@ function useTasks() {
       setEditarFechaVencimiento(null);
       setEditarPrioridad(null);
       setEditarLista(null);
+      setCargandoTarea(false);
     } catch (error) {
-      console.error("Error borrando la tarea", error)
+      console.error("Error borrando la tarea", error);
+      setCargandoTarea(false);
     }
   };
 
@@ -227,6 +242,7 @@ function useTasks() {
   }
 
   const guardarCambios = async () => {
+    setCargandoTarea(true);
     try {
       const token = localStorage.getItem('token_usuario');
       const tareaEditada = {
@@ -246,6 +262,7 @@ function useTasks() {
       });
 
       if (!respuesta.ok) {
+        setCargandoTarea(false);
         throw new Error(`error:${respuesta.status} ${respuesta.statusText}`);
       }
 
@@ -257,8 +274,10 @@ function useTasks() {
       setEditarFechaVencimiento(null);
       setEditarLista(null);
       setEditarPrioridad(null);
+      setCargandoTarea(false);
     } catch (error) {
       console.error("Ha habido un error",error);
+      setCargandoTarea(false);
     }
     
   };
@@ -302,7 +321,9 @@ function useTasks() {
     fechaHoy,
     refrescarTareas,
     error,
-    setError
+    setError,
+    cargandoTarea,
+    setCargandoTarea
   };
 }
 

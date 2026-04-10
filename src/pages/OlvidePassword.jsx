@@ -3,9 +3,10 @@ import Error from "../components/Error";
 import useUsersContext from "../hooks/useUsersContext"
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import Cargando from "../components/Cargando";
 
 const OlvidePassword = () => {
-    const {email,setEmail,exito,setExito,error,setError,enviarEmailOlvide} = useUsersContext();
+    const {email,setEmail,exito,setExito,error,setError,enviarEmailOlvide,cargando} = useUsersContext();
     const navigate = useNavigate();
      useEffect(() => {
             document.title = "Cambiar Contraseña - TAZK";
@@ -24,6 +25,8 @@ const OlvidePassword = () => {
                     cerrar= {()=>setExito('')}
                 />
             }
+            {cargando && 
+                <Cargando/>}
             {error &&
                 <Error 
                     mensaje={error}

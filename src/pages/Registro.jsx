@@ -5,6 +5,7 @@ import useUsersContext from "../hooks/useUsersContext";
 import Error from "../components/Error";
 import Exito from "../components/Exito";
 import { useEffect } from "react";
+import Cargando from "../components/Cargando";
 
 const Registro = () => {
     const {
@@ -24,7 +25,9 @@ const Registro = () => {
         foto,
         preview,
         manejarCambioFoto,
-        obtenerPerfil
+        obtenerPerfil,
+        cargando,
+        setCargando
     } = useUsersContext();
 
     const { refrescarTareas } = useTasksContext();
@@ -43,7 +46,10 @@ const Registro = () => {
                 className="fixed top-6 left-6 md:top-8 md:left-8 h-8 md:h-10 w-auto cursor-pointer z-50"
                 onClick={() => navigate("/welcome")}
             />
+            {cargando && 
+                <Cargando/>
 
+            }
             {exito &&
                 <Exito 
                     mensaje={exito}

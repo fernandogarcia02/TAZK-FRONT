@@ -6,6 +6,7 @@ import Error from '../components/Error.jsx';
 import useTasksContext from '../hooks/useTasksContext.js';
 import useListsContext from '../hooks/useListsContext.js';
 import Sidebar from '../components/Sidebar.jsx';
+import Cargando from '../components/Cargando.jsx';
 
 
 
@@ -15,10 +16,11 @@ const Lista = () =>{
   const {
     modalAbierto,
     abrirCrearTarea,
-    error
+    error,
+    cargandoTarea
     
   } = useTasksContext();
-  const {modalCrearLista} = useListsContext();
+  const {modalCrearLista, cargandoLista} = useListsContext();
     return (
         <div className='bg-white min-h-screen w-full flex'>
 
@@ -40,6 +42,13 @@ const Lista = () =>{
       )}
       {error && (
         <Error/>
+      )}
+        {cargandoTarea && (
+        <Cargando/>
+      )}
+
+      {cargandoLista && (
+        <Cargando/>
       )}
     </div>
     )

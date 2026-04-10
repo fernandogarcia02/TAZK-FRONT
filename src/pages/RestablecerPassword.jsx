@@ -3,11 +3,12 @@ import Error from "../components/Error";
 import Exito from "../components/Exito";
 import useUsersContext from "../hooks/useUsersContext";
 import { useEffect } from "react";
+import Cargando from "../components/Cargando";
 
 const RestablecerPassword = () => {
     const params = useParams();
     const { token } = params;
-    const { password, setPassword, password2, setPassword2, cambiarPassword,exito,setExito,error,setError } = useUsersContext();
+    const { password, setPassword, password2, setPassword2, cambiarPassword,exito,setExito,error,setError,cargando } = useUsersContext();
     const navigate = useNavigate();
      useEffect(() => {
             document.title = "Cambiar Contraseña - TAZK";
@@ -21,6 +22,8 @@ const RestablecerPassword = () => {
               className="fixed top-6 left-6 md:top-8 md:left-8 h-8 md:h-10 w-auto cursor-pointer z-50"
               onClick={() => navigate("/welcome")} 
             />
+            {cargando &&
+                <Cargando/>}
             {exito &&
                 <Exito 
                     mensaje={exito}

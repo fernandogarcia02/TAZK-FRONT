@@ -9,14 +9,15 @@ import TaskModal from "../components/TaskModal";
 import CrearLista from "../components/CrearLista";
 import TaskForm from '../components/TaskForm';
 import Error from "../components/Error";
+import Cargando from "../components/Cargando";
 import '../assets/styles/calendario.css'
 import { API_URL } from '../config/urls';
 
 
 function Calendario() {
     const calendarRef = useRef(null);
-    const { items, modalAbierto, abrirCrearTarea, setFechaVencimiento, modalCrearTarea, abrirModal, refrescarTareas,error } = useTasksContext();
-    const { modalCrearLista } = useListsContext();
+    const { items, modalAbierto, abrirCrearTarea, setFechaVencimiento, modalCrearTarea, abrirModal, refrescarTareas, error, cargandoTarea } = useTasksContext();
+    const { modalCrearLista, cargandoLista } = useListsContext();
 
     useEffect(() => {
         document.title = "Calendario - TAZK";
@@ -77,20 +78,20 @@ function Calendario() {
         }
     });
 
-   return (
+    return (
         <div className='bg-white min-h-[100dvh] w-full flex flex-col md:flex-row overflow-x-hidden'>
             <Sidebar />
 
             {/* Cambiamos h-screen por min-h-0 para que flex-1 funcione correctamente */}
             <div className="flex-1 flex flex-col p-2 md:p-6 min-h-0 overflow-hidden">
-                
+
                 {/* Espaciador superior para móvil */}
                 <div className="h-16 md:h-8 shrink-0"></div>
 
                 <div className="flex justify-between items-center mb-4 shrink-0 px-2">
                     <div className="custom-select-wrapper w-full md:w-auto">
-                        <select 
-                            onChange={handleChangeView} 
+                        <select
+                            onChange={handleChangeView}
                             className="w-full md:w-auto font-inter text-sm text-[#007011] bg-white border border-[#007011] rounded-lg px-2 py-2 outline-none cursor-pointer"
                         >
                             <option value="dayGridMonth">Vista Mes</option>
@@ -106,7 +107,7 @@ function Calendario() {
                         ref={calendarRef}
                         plugins={[dayGridPlugin, interactionPlugin]}
                         initialView={window.innerWidth < 768 ? "dayGridDay" : "dayGridMonth"}
-                        height="100%" 
+                        height="100%"
                         locale="es"
                         /* Ajustamos el ratio para que en móvil sea más vertical */
                         aspectRatio={window.innerWidth < 768 ? 0.5 : 1.5}
@@ -122,7 +123,7 @@ function Calendario() {
                         headerToolbar={{
                             left: 'prev,next today',
                             center: 'title',
-                            right: '' 
+                            right: ''
                         }}
                         buttonText={{ today: 'Hoy' }}
                     />
@@ -132,7 +133,14 @@ function Calendario() {
             {abrirCrearTarea && <TaskForm />}
             {modalCrearLista && <CrearLista />}
             {modalAbierto && <TaskModal />}
-            {error && <Error/>}
+            {error && <Error />}
+            {cargandoTarea && (
+                <Cargando />
+            )}
+
+            {cargandoLista && (
+                <Cargando />
+            )}
         </div>
     );
 }

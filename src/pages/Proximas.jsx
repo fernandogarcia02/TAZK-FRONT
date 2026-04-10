@@ -7,45 +7,54 @@ import useListsContext from '../hooks/useListsContext.js';
 import Error from '../components/Error.jsx';
 import Sidebar from '../components/Sidebar.jsx';
 import { useEffect } from 'react';
+import Cargando from '../components/Cargando.jsx';
 
 
 
-const Proximas = () =>{
+const Proximas = () => {
 
-    // Hook
+  // Hook
   const {
     modalAbierto,
     abrirCrearTarea,
-    error
-    
+    error,
+    cargandoTarea
+
   } = useTasksContext();
-  const {modalCrearLista} = useListsContext();
-   useEffect(() => {
-            document.title = "Proximas Tareas - TAZK";
-        }, []);
-    return (
-        <div className='bg-white min-h-screen w-full flex'>
+  const { modalCrearLista,cargandoLista } = useListsContext();
+  useEffect(() => {
+    document.title = "Proximas Tareas - TAZK";
+  }, []);
+  return (
+    <div className='bg-white min-h-screen w-full flex'>
 
       {abrirCrearTarea && (
         <TaskForm />
       )}
-      
-      <Sidebar/>
+
+      <Sidebar />
 
 
-      <TaskListProximas/>
+      <TaskListProximas />
 
       {modalCrearLista && (
-        <CrearLista/>
+        <CrearLista />
       )}
 
       {modalAbierto && (
-      <TaskModal/>
+        <TaskModal />
       )}
       {error && (
-        <Error/>
+        <Error />
+      )}
+      {cargandoTarea && (
+        <Cargando />
+      )}
+
+      {cargandoLista && (
+        <Cargando />
       )}
     </div>
-    )
+  )
 }
 export default Proximas;

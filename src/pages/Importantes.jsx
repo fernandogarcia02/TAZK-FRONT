@@ -6,6 +6,7 @@ import useTasksContext from '../hooks/useTasksContext';
 import useListsContext from '../hooks/useListsContext.js';
 import Error from '../components/Error.jsx';
 import Sidebar from '../components/Sidebar.jsx';
+import Cargando from '../components/Cargando.jsx';
 import { useEffect } from 'react';
 
 
@@ -16,10 +17,11 @@ const Importantes = () =>{
   const {
     modalAbierto,
     abrirCrearTarea,
-    error
+    error,
+    cargandoTarea
     
   } = useTasksContext();
-  const {modalCrearLista} = useListsContext();
+  const {modalCrearLista, cargandoLista} = useListsContext();
   useEffect(() => {
           document.title = "Importantes - TAZK";
       }, []);
@@ -46,6 +48,13 @@ const Importantes = () =>{
       )}
       {error && (
         <Error/>
+      )}
+        {cargandoTarea && (
+        <Cargando/>
+      )}
+
+      {cargandoLista && (
+        <Cargando/>
       )}
     </div>
     )
