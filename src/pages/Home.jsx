@@ -17,8 +17,8 @@ const Home = () =>{
   const {
     modalAbierto,
     abrirCrearTarea,
-    error,
-    setError,
+    errorTarea,
+    setErrorTarea,
     cargandoTarea
   } = useTasksContext();
   const {
@@ -37,8 +37,10 @@ const Home = () =>{
         <TaskForm />
       )}
 
-      {error && (
-        <Error/>
+      {errorTarea && (
+        <Error
+        mensaje={errorTarea}
+        cerrar={()=>setErrorTarea('')}/>
       )}
       {cargandoTarea && (
         <Cargando/>

@@ -17,7 +17,8 @@ const Importantes = () =>{
   const {
     modalAbierto,
     abrirCrearTarea,
-    error,
+    errorTarea,
+    setErrorTarea,
     cargandoTarea
     
   } = useTasksContext();
@@ -46,8 +47,10 @@ const Importantes = () =>{
       {modalAbierto && (
       <TaskModal/>
       )}
-      {error && (
-        <Error/>
+      {errorTarea && (
+        <Error
+        mensaje={errorTarea}
+        cerrar={()=>setErrorTarea('')}/>
       )}
         {cargandoTarea && (
         <Cargando/>

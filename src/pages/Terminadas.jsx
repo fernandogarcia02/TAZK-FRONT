@@ -17,7 +17,8 @@ const Terminadas = () => {
   const {
     modalAbierto,
     abrirCrearTarea,
-    error,
+    errorTarea,
+    setErrorTarea,
     cargandoTarea
 
   } = useTasksContext();
@@ -44,8 +45,10 @@ const Terminadas = () => {
       {modalAbierto && (
         <TaskModal />
       )}
-      {error && (
-        <Error />
+      {errorTarea && (
+        <Error 
+        mensaje={errorTarea}
+        cerrar={()=>setErrorTarea('')}/>
       )}
       {cargandoTarea && (
         <Cargando />

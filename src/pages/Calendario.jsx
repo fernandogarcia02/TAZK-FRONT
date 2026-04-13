@@ -16,7 +16,7 @@ import { API_URL } from '../config/urls';
 
 function Calendario() {
     const calendarRef = useRef(null);
-    const { items, modalAbierto, abrirCrearTarea, setFechaVencimiento, modalCrearTarea, abrirModal, refrescarTareas, error, cargandoTarea } = useTasksContext();
+    const { items, modalAbierto, abrirCrearTarea, setFechaVencimiento, modalCrearTarea, abrirModal, refrescarTareas, errorTarea,setErrorTarea, cargandoTarea } = useTasksContext();
     const { modalCrearLista, cargandoLista } = useListsContext();
 
     useEffect(() => {
@@ -133,7 +133,9 @@ function Calendario() {
             {abrirCrearTarea && <TaskForm />}
             {modalCrearLista && <CrearLista />}
             {modalAbierto && <TaskModal />}
-            {error && <Error />}
+            {errorTarea && <Error
+            mensaje={errorTarea}
+            cerrar={()=>setErrorTarea('')} />}
             {cargandoTarea && (
                 <Cargando />
             )}

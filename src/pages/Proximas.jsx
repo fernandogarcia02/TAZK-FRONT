@@ -17,7 +17,8 @@ const Proximas = () => {
   const {
     modalAbierto,
     abrirCrearTarea,
-    error,
+    errorTarea,
+    setErrorTarea,
     cargandoTarea
 
   } = useTasksContext();
@@ -44,8 +45,10 @@ const Proximas = () => {
       {modalAbierto && (
         <TaskModal />
       )}
-      {error && (
-        <Error />
+      {errorTarea && (
+        <Error 
+        mensaje={errorTarea}
+        cerrar={()=>setErrorTarea('')}/>
       )}
       {cargandoTarea && (
         <Cargando />
