@@ -110,7 +110,7 @@ function TaskForm() {
                     className="font-inter mt-6 md:absolute md:bottom-10 md:right-10 text-white border border-white bg-[#7B9F7D] rounded-xl p-3 md:p-2 w-full md:w-30 hover:scale-105 transition-transform cursor-pointer active:scale-95 shadow-md"
                     onClick={(e) => {
                         e.preventDefault();
-                        setAbrirCrearTarea(false);
+                        //setAbrirCrearTarea(false);
                         agregarItem();
                     }}>Guardar</button>
             </form>

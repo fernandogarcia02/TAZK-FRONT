@@ -47,7 +47,7 @@ const Sidebar = () => {
             {/* 4. EL SIDEBAR ADAPTADO */}
             <div id="sidebar"
                 className={`
-                    fixed md:static inset-y-0 left-0 z-[70]
+                    fixed no-scrollbar md:static inset-y-0 left-0 z-[70]
                     w-[280px] md:w-1/5 bg-white md:bg-transparent
                     flex flex-col transition-transform duration-300 ease-in-out
                     ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
@@ -71,7 +71,7 @@ const Sidebar = () => {
 
                 {/* Contenedor Verde */}
                 <div id="tareas"
-                    className="relative rounded-t-[25px] md:rounded-r-[25px] font-inter bg-[#007011] h-full flex-1 overflow-y-auto pb-20"
+                    className="relative no-scrollbar rounded-t-[25px] md:rounded-r-[25px] font-inter bg-[#007011] h-full flex-1 overflow-y-auto pb-20"
                 >
                     <button onClick={() => { 
                         

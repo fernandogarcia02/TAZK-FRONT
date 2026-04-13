@@ -122,6 +122,11 @@ function useUsers() {
 
                 return true; // <--- AGREGADO: Éxito
             } else {
+                if (data.mensaje === "Tu cuenta aún no ha sido confirmada") {
+                    setError('Tu cuenta aún no ha sido confirmada. REENVIAR_EMAIL');
+                    setCargando(false);
+                    return false;
+                }
                 setError(data.mensaje || 'Error al iniciar sesión');
                 console.log("asaaaaaaa")
                 limpiarFormulario();
@@ -136,6 +141,40 @@ function useUsers() {
             return false; // <--- AGREGADO: Error de red
         }
     };
+
+    const reenviarEmail = async () => {
+        setCargando(true);
+        setError('');
+        setExito('');
+        console.log(email);
+        try {
+            const respuesta = await fetch(`${API_URL}/usuarios/reenviar`, {
+                method: 'POST',
+                headers: {'Content-Type' : 'application/json'},
+                body: JSON.stringify({email})
+            });
+
+            const data = await respuesta.json();
+
+            if (!respuesta.ok) {
+                setError(data.mensaje);
+                limpiarFormulario();
+                setCargando(false);
+                return;
+            }else{
+                setExito(data.mensaje);
+                limpiarFormulario();
+                setCargando(false);
+                return;
+            }
+        } catch (error) {
+            setError(error.message || 'Error de conexión');
+            limpiarFormulario();
+            setCargando(false);
+            return;
+        }
+    };
+
     const enviarEmailOlvide = async () => {
         setError('');
         setExito('');
@@ -322,7 +361,8 @@ function useUsers() {
         enviarEmailOlvide,
         cambiarPassword,
         cargando,
-        setCargando
+        setCargando,
+        reenviarEmail
     }
 }
 

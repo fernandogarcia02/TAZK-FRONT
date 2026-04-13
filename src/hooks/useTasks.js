@@ -27,7 +27,7 @@ function useTasks() {
 
   const [abrirCrearTarea, setAbrirCrearTarea] = useState(false);
 
-  const [error, setError] = useState('');
+  const [errorTarea, setErrorTarea] = useState('');
   const [cargandoTarea, setCargandoTarea] = useState(false);
 
   const navigate = useNavigate();
@@ -84,7 +84,9 @@ function useTasks() {
   }, []);
 
   const agregarItem = async () => {
-    if (text.trim() === '') return;
+    if (text.trim() === ''){ 
+      setErrorTarea("La tarea debe tener un título");
+      return;};
     setCargandoTarea(true);
     try {
       const token = localStorage.getItem('token_usuario');
@@ -118,8 +120,10 @@ function useTasks() {
       setLista('');
       setFechaVencimiento(fechaHoy());
       setCargandoTarea(false);
+      setAbrirCrearTarea(false);
     } catch (error) {
-      console.error("Error creando tarea",error)  
+      console.error("Error creando tarea",error) 
+      setErrorTarea(error || "Error con el servidor"); 
       setCargandoTarea(false);
     }
 
@@ -134,7 +138,7 @@ function useTasks() {
       const tarea = items.find(item => item._id === id);
       if(!tarea){
         setCargandoTarea(false);
-        throw new Error('error')};
+        throw new Error('Error encontrando la tarea a completar')};
 
       const respuesta = await fetch(`${API_URL}/tareas/${id}`,{
         method: 'PUT',
@@ -153,6 +157,7 @@ function useTasks() {
       refrescarTareas();
     } catch (error) {
       console.error(error);
+      setErrorTarea(error || 'Error de conexión');
       setCargandoTarea(false);
     }
     
@@ -186,6 +191,7 @@ function useTasks() {
     } catch (error) {
       console.error("Error borrando la tarea", error);
       setCargandoTarea(false);
+      setErrorTarea(error || 'Error de conexión')
     }
   };
 
@@ -242,7 +248,12 @@ function useTasks() {
   }
 
   const guardarCambios = async () => {
-    setCargandoTarea(true);
+    if (editarTexto.trim() === '') {
+      setErrorTarea('La tarea debe contener un título');
+      return;
+    }
+        setCargandoTarea(true);
+
     try {
       const token = localStorage.getItem('token_usuario');
       const tareaEditada = {
@@ -320,8 +331,8 @@ function useTasks() {
     setFechaVencimiento,
     fechaHoy,
     refrescarTareas,
-    error,
-    setError,
+    errorTarea,
+    setErrorTarea,
     cargandoTarea,
     setCargandoTarea
   };

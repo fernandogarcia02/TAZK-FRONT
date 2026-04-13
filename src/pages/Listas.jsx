@@ -23,7 +23,7 @@ function Listas() {
         cargandoLista
     } = useListsContext();
 
-    const { modalAbierto, abrirCrearTarea, error,cargandoTarea } = useTasksContext();
+    const { modalAbierto, abrirCrearTarea, errorTarea,setErrorTarea,cargandoTarea } = useTasksContext();
     useEffect(() => {
         document.title = "Listas - TAZK";
     }, []);
@@ -38,7 +38,9 @@ function Listas() {
             {modalCrearLista && <CrearLista />}
             {modalEditarLista && <ListModal />}
             {modalAbierto && <TaskModal />}
-            {error && <Error />}
+            {errorTarea && <Error
+            mensaje={errorTarea}
+            cerrar={()=>setErrorTarea('')} />}
             {modalEliminarLista && <DeleteModal />}
             {cargandoTarea && (
                 <Cargando />
