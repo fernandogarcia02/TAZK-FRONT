@@ -54,6 +54,7 @@ function useTasks() {
   // 1. DEFINIMOS LA FUNCIÓN AQUÍ (Ahora es visible para todo el hook)
   const refrescarTareas = async () => {
     try {
+      setCargandoTarea(true);
       const token = localStorage.getItem('token_usuario');
       const respuesta = await fetch(`${API_URL}/tareas`,{
         headers:{
@@ -65,12 +66,15 @@ function useTasks() {
       if (respuesta.status === 401) {
         localStorage.removeItem('token_usuario');
         navigate('/welcome');
+        setCargandoTarea(false);
         return;
       }
       const datos = await respuesta.json(); // Forma limpia
       setItems(datos);
+      setCargandoTarea(false);
     } catch (error) {
       console.error("Error al conectar con el backend", error);
+      setCargandoTarea(false);
     }
   };
 
