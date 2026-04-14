@@ -14,8 +14,8 @@ function useTasks() {
   // Estado solo de inputs y modales
   const [text, setText] = useState('');
   const [description, setDescription] = useState('');
-  
-   
+
+
   //estados para editar
   const [modalAbierto, setModalAbierto] = useState(false);
   const [taskEditar, setTaskEditar] = useState(null);
@@ -23,28 +23,31 @@ function useTasks() {
   const [editarDescription, setEditarDescription] = useState('');
   const [editarFechaVencimiento, setEditarFechaVencimiento] = useState(null);
   const [editarPrioridad, setEditarPrioridad] = useState(null);
-  
+
 
   const [abrirCrearTarea, setAbrirCrearTarea] = useState(false);
 
   const [errorTarea, setErrorTarea] = useState('');
   const [cargandoTarea, setCargandoTarea] = useState(false);
 
+  //ESTADOS PARA REPETICIÓN
+  const [repeticion, setRepeticion] = useState('ninguna');
+
   const navigate = useNavigate();
 
 
-  const fechaHoy = () =>{
+  const fechaHoy = () => {
     const hoy = new Date();
     const yyyy = hoy.getFullYear();
-    const mm = String(hoy.getMonth()+1).padStart(2,'0');
-    const dd = String(hoy.getDate()).padStart(2,'0');
+    const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+    const dd = String(hoy.getDate()).padStart(2, '0');
     return `${yyyy}-${mm}-${dd}`;
   }
 
   const [fechaVencimiento, setFechaVencimiento] = useState(fechaHoy());
 
 
-  const{lista,setLista,editarLista,setEditarLista} = useListsContext();
+  const { lista, setLista, editarLista, setEditarLista } = useListsContext();
 
   // ======================
   // CRUD
@@ -56,9 +59,9 @@ function useTasks() {
     try {
       setCargandoTarea(true);
       const token = localStorage.getItem('token_usuario');
-      const respuesta = await fetch(`${API_URL}/tareas`,{
-        headers:{
-          'Authorization' : `Bearer ${token}`
+      const respuesta = await fetch(`${API_URL}/tareas`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
         }
       }
       );
@@ -88,69 +91,123 @@ function useTasks() {
   }, []);
 
   const agregarItem = async () => {
-    if (text.trim() === ''){ 
+    if (text.trim() === '') {
       setErrorTarea("La tarea debe tener un título");
-      return;};
+      return;
+    };
     setCargandoTarea(true);
     try {
       const token = localStorage.getItem('token_usuario');
-      const nuevaTarea = {
-      text,
-      description,
-      completed: false,
-      priority: prioridad,
-      list_id: lista,
-      fechaVencimiento: fechaVencimiento
-    };
-      const respuesta = await fetch(`${API_URL}/tareas`,{
-          method: 'POST',
-          headers:{
-            'Content-Type' : 'application/json',
-            'Authorization' : `Bearer ${token}`
-          },
-          body: JSON.stringify(nuevaTarea)
+      // 1. Declaramos la variable fuera de los bloques para que sea accesible en todo el código
+      let fecha_final_calculada;
+
+      if (repeticion !== 'ninguna') {
+        if (repeticion === 'diaria') {
+          fecha_final_calculada = fechaHoy();
         }
+        else if (repeticion === 'fin-de-semana') {
+          const diaSemana = new Date().getDay();
+          // Si es de Lunes (1) a Viernes (5), calculamos el próximo Sábado
+          if (diaSemana !== 0 && diaSemana !== 6) {
+            fecha_final_calculada = calcularSiguienteFecha(fechaHoy(), 'fin-de-semana');
+          } else {
+            fecha_final_calculada = fechaHoy();
+          }
+        }
+        else if (repeticion === 'entre-semana') {
+          const diaSemana = new Date().getDay();
+          // Si es Sábado (6) o Domingo (0), calculamos el próximo Lunes
+          if (diaSemana === 0 || diaSemana === 6) {
+            fecha_final_calculada = calcularSiguienteFecha(fechaHoy(), 'entre-semana');
+          } else {
+            fecha_final_calculada = fechaHoy();
+          }
+        }
+      } else {
+        // Si no hay repetición, usamos la fecha que viene del input (o fechaHoy si está vacío)
+        fecha_final_calculada = fechaVencimiento || fechaHoy();
+      }
+
+      // 2. Creamos el objeto UNA SOLA VEZ
+      const nuevaTarea = {
+        text,
+        description,
+        completed: false,
+        priority: prioridad,
+        list_id: lista,
+        fechaVencimiento: fecha_final_calculada,
+        repeticion: repeticion
+      };
+
+
+
+      const respuesta = await fetch(`${API_URL}/tareas`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(nuevaTarea)
+      }
       );
-      
+
       if (!respuesta.ok) {
         setCargandoTarea(false);
         throw new Error(`Error:${respuesta.status} ${respuesta.statusText}`)
       }
 
       refrescarTareas();
-      setText('');
-      setDescription('');
-      setPrioridad(false);
-      setLista('');
-      setFechaVencimiento(fechaHoy());
       setCargandoTarea(false);
       setAbrirCrearTarea(false);
+      limpiarFormularioTareas();
     } catch (error) {
-      console.error("Error creando tarea",error) 
-      setErrorTarea(error || "Error con el servidor"); 
+      console.error("Error creando tarea", error)
+      setErrorTarea(error || "Error con el servidor");
       setCargandoTarea(false);
     }
 
-  
-    
+
+
   };
+
+  const limpiarFormularioTareas = () => {
+    setText('');
+    setDescription('');
+    setPrioridad(false);
+    setLista('');
+    setFechaVencimiento(fechaHoy());
+    setRepeticion('ninguna');
+    setEditarTexto('');
+    setEditarDescription('');
+    setEditarFechaVencimiento(null);
+    setEditarPrioridad(null);
+    setEditarLista(null);
+  }
 
   const toggleCompleted = async (id) => {
     setCargandoTarea(true);
     try {
       const token = localStorage.getItem('token_usuario');
       const tarea = items.find(item => item._id === id);
-      if(!tarea){
+      if (!tarea) {
         setCargandoTarea(false);
-        throw new Error('Error encontrando la tarea a completar')};
+        throw new Error('Error encontrando la tarea a completar')
+      };
+      let fecha_final = tarea.fechaVencimiento;
+      let completado = !tarea.completed;
 
-      const respuesta = await fetch(`${API_URL}/tareas/${id}`,{
+      if (tarea.repeticion !== 'ninguna') {
+        fecha_final = calcularSiguienteFecha(fechaHoy(), tarea.repeticion);
+        completado = false;
+      }
+
+      const respuesta = await fetch(`${API_URL}/tareas/${id}`, {
         method: 'PUT',
-        headers:{
-          'Content-type' : 'application/json',
-          'Authorization' : `Bearer ${token}`
+        headers: {
+          'Content-type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({completed: !tarea.completed})
+        body: JSON.stringify({ completed: completado, fechaVencimiento: fecha_final })
       }
       );
       if (!respuesta.ok) {
@@ -164,7 +221,7 @@ function useTasks() {
       setErrorTarea(error || 'Error de conexión');
       setCargandoTarea(false);
     }
-    
+
   };
 
   const borrarItem = async (id) => {
@@ -182,16 +239,12 @@ function useTasks() {
         setCargandoTarea(false);
         throw new Error(`Error:${respuesta.status} ${respuesta.statusText}`)
       }
-      
+
       refrescarTareas();
       setModalAbierto(false);
       setTaskEditar(null);
-      setEditarTexto('');
-      setEditarDescription('');
-      setEditarFechaVencimiento(null);
-      setEditarPrioridad(null);
-      setEditarLista(null);
       setCargandoTarea(false);
+      limpiarFormularioTareas();
     } catch (error) {
       console.error("Error borrando la tarea", error);
       setCargandoTarea(false);
@@ -209,35 +262,35 @@ function useTasks() {
     );
   };
 
- 
+
 
   // ======================
   // ORDENACIÓN
   // ======================
- const tareasOrdenadas = [...items].sort((a, b) => {
-  // 1. Prioridad por estado de completado
-  // (Queremos las NO completadas arriba)
-  if (a.completed !== b.completed) {
-    return a.completed ? 1 : -1;
-  }
+  const tareasOrdenadas = [...items].sort((a, b) => {
+    // 1. Prioridad por estado de completado
+    // (Queremos las NO completadas arriba)
+    if (a.completed !== b.completed) {
+      return a.completed ? 1 : -1;
+    }
 
-  // 2. Si ambas están igual (ej: ambas pendientes), ordenamos por fecha
-  const fechaA = new Date(a.fechaVencimiento).getTime();
-  const fechaB = new Date(b.fechaVencimiento).getTime();
+    // 2. Si ambas están igual (ej: ambas pendientes), ordenamos por fecha
+    const fechaA = new Date(a.fechaVencimiento).getTime();
+    const fechaB = new Date(b.fechaVencimiento).getTime();
 
-  // Si no hay fecha, la mandamos al final
-  if (isNaN(fechaA)) return 1;
-  if (isNaN(fechaB)) return -1;
+    // Si no hay fecha, la mandamos al final
+    if (isNaN(fechaA)) return 1;
+    if (isNaN(fechaB)) return -1;
 
-  return fechaA - fechaB; // Menor tiempo (más vieja/próxima) primero
-});
+    return fechaA - fechaB; // Menor tiempo (más vieja/próxima) primero
+  });
 
 
   ///////////////////////////////
-            //MODAL//
+  //MODAL//
   //////////////////////////////////
 
-   const abrirModal = (task) => {
+  const abrirModal = (task) => {
     setTaskEditar(task);
     setEditarTexto(task.text);
     setEditarDescription(task.description);
@@ -256,22 +309,27 @@ function useTasks() {
       setErrorTarea('La tarea debe contener un título');
       return;
     }
-        setCargandoTarea(true);
-
+    setCargandoTarea(true);
+    let fecha_fin = editarFechaVencimiento;
     try {
       const token = localStorage.getItem('token_usuario');
-      const tareaEditada = {
-        text:editarTexto,
-        description:editarDescription,
-        priority:editarPrioridad,
-        list_id:editarLista,
-        fechaVencimiento:editarFechaVencimiento
+
+      if (taskEditar.repeticion !== 'ninguna') {
+        fecha_fin = taskEditar.fechaVencimiento;
       }
-      const respuesta = await fetch(`${API_URL}/tareas/${taskEditar._id}`,{
+
+      const tareaEditada = {
+        text: editarTexto,
+        description: editarDescription,
+        priority: editarPrioridad,
+        list_id: editarLista,
+        fechaVencimiento: fecha_fin
+      }
+      const respuesta = await fetch(`${API_URL}/tareas/${taskEditar._id}`, {
         method: 'PUT',
-        headers:{
-          'Content-type' : 'application/json',
-          'Authorization' : `Bearer ${token}`
+        headers: {
+          'Content-type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(tareaEditada)
       });
@@ -284,20 +342,48 @@ function useTasks() {
       refrescarTareas();
       setModalAbierto(false);
       setTaskEditar(null);
-      setEditarTexto('');
-      setEditarDescription('');
-      setEditarFechaVencimiento(null);
-      setEditarLista(null);
-      setEditarPrioridad(null);
       setCargandoTarea(false);
+      limpiarFormularioTareas();
     } catch (error) {
-      console.error("Ha habido un error",error);
+      console.error("Ha habido un error", error);
       setCargandoTarea(false);
     }
-    
+
   };
 
-  
+  const calcularSiguienteFecha = (fechaISO, tipoRepeticion) => {
+    // 1. Limpiamos el formato de la DB: de "2026-05-25T00..." nos quedamos con "2026-05-25"
+    const fechaLimpia = fechaISO.split('T')[0];
+
+    // 2. Convertimos a objeto Date sin problemas de zona horaria
+    const [year, month, day] = fechaLimpia.split('-').map(Number);
+    let fecha = new Date(year, month - 1, day);
+
+    const sumarDia = (d) => d.setDate(d.getDate() + 1);
+
+    if (tipoRepeticion === 'diaria') {
+      sumarDia(fecha);
+    }
+    else if (tipoRepeticion === 'entre-semana') {
+      do {
+        sumarDia(fecha);
+      } while (fecha.getDay() === 0 || fecha.getDay() === 6);
+    }
+    else if (tipoRepeticion === 'fin-de-semana') {
+      do {
+        sumarDia(fecha);
+      } while (fecha.getDay() !== 0 && fecha.getDay() !== 6);
+    }
+
+    // 3. Convertimos de vuelta al formato YYYY-MM-DD que le gusta a tu input
+    const yyyy = fecha.getFullYear();
+    const mm = String(fecha.getMonth() + 1).padStart(2, '0');
+    const dd = String(fecha.getDate()).padStart(2, '0');
+
+    return `${yyyy}-${mm}-${dd}`;
+  };
+
+
 
   // ======================
   // RETURN (MOCHILA)
@@ -338,7 +424,10 @@ function useTasks() {
     errorTarea,
     setErrorTarea,
     cargandoTarea,
-    setCargandoTarea
+    setCargandoTarea,
+    repeticion,
+    setRepeticion,
+    limpiarFormularioTareas
   };
 }
 

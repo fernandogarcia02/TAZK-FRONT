@@ -97,16 +97,17 @@ function TaskModal() {
                     </button>
 
                     {/* Fecha */}
-                    <div className="w-full p-2 flex bg-white rounded-xl transition-transform hover:scale-105 active:scale-95">
+                    <div className={`${taskEditar.repeticion !== 'ninguna' ? 'opacity-50 cursor-not-allowed grayscale' : ''} w-full p-2 flex bg-white rounded-xl transition-transform hover:scale-105 active:scale-95`}>
                         <img src="/icons/calendar_green.png" alt="calendar" className="mr-2 w-5 h-5 shrink-0" />
                         <input
                             type="date"
                             name="fechaVencimiento"
                             id="fechaVencimiento"
                             value={editarFechaVencimiento}
+                            disabled={taskEditar.repeticion !== 'ninguna'}
                             onChange={(e) => setEditarFechaVencimiento(e.target.value)}
                             onClick={(e) => e.target.showPicker()}
-                            className="font-inter text-sm text-[#007011] cursor-pointer bg-transparent outline-none w-full text-center"
+                            className={`${taskEditar.repeticion !== 'ninguna' ? 'opacity-50 cursor-not-allowed grayscale' : ''} font-inter text-sm text-[#007011] cursor-pointer bg-transparent outline-none w-full text-center`}
                         />
                     </div>
                 </div>

@@ -16,7 +16,7 @@ import { API_URL } from '../config/urls';
 
 function Calendario() {
     const calendarRef = useRef(null);
-    const { items, modalAbierto, abrirCrearTarea, setFechaVencimiento, modalCrearTarea, abrirModal, refrescarTareas, errorTarea,setErrorTarea, cargandoTarea } = useTasksContext();
+    const { items, modalAbierto, abrirCrearTarea, setFechaVencimiento, modalCrearTarea, abrirModal, refrescarTareas, errorTarea, setErrorTarea, cargandoTarea } = useTasksContext();
     const { modalCrearLista, cargandoLista } = useListsContext();
 
     useEffect(() => {
@@ -61,7 +61,7 @@ function Calendario() {
         }
     }
 
-    const eventos = items.map(task => {
+    const eventos = items.flatMap(task => {
         const hoy = new Date().toISOString().split('T')[0];
         const fechaTarea = task.fechaVencimiento ? task.fechaVencimiento.split('T')[0] : null;
         let clases = "tarea-base";
@@ -69,13 +69,31 @@ function Calendario() {
         if (task.priority && !task.completed) clases += " tarea-importante";
         if (fechaTarea && fechaTarea < hoy && !task.completed) clases += " tarea-vencida";
 
+        if (!task.repeticion || task.repeticion === 'ninguna') {
+            return {
+                id: task._id,
+                title: task.text,
+                start: task.fechaVencimiento ? task.fechaVencimiento.split('T')[0] : null,
+                className: clases,
+                extendedProps: { ...task }
+            }
+        }
+
+        // Si ES periódica, usamos 'daysOfWeek' para que FullCalendar la repita
+        let diasRepeticion = [];
+        if (task.repeticion === 'diaria') diasRepeticion = [0, 1, 2, 3, 4, 5, 6]; // Todos los días
+        if (task.repeticion === 'entre-semana') diasRepeticion = [1, 2, 3, 4, 5]; // Lunes a Viernes
+        if (task.repeticion === 'fin-de-semana') diasRepeticion = [0, 6];        // Sábado y Domingo
+
         return {
             id: task._id,
-            title: task.text,
-            start: task.fechaVencimiento ? task.fechaVencimiento.split('T')[0] : null,
-            className: clases,
+            title: `${task.text}`, // Icono para diferenciar que es recurrente
+            daysOfWeek: diasRepeticion,
+            startRecur: task.fechaCreacion || '2024-01-01', // Fecha desde la que empieza a aparecer
+            className: clases + " tarea-recurrente",
             extendedProps: { ...task }
-        }
+        };
+
     });
 
     return (
@@ -134,8 +152,8 @@ function Calendario() {
             {modalCrearLista && <CrearLista />}
             {modalAbierto && <TaskModal />}
             {errorTarea && <Error
-            mensaje={errorTarea}
-            cerrar={()=>setErrorTarea('')} />}
+                mensaje={errorTarea}
+                cerrar={() => setErrorTarea('')} />}
             {cargandoTarea && (
                 <Cargando />
             )}
