@@ -13,7 +13,10 @@ function TaskForm() {
         setAbrirCrearTarea,
         fechaVencimiento,
         setFechaVencimiento,
-        fechaHoy
+        fechaHoy,
+        repeticion,
+        setRepeticion,
+        limpiarFormularioTareas
     } = useTasksContext();
 
     const {
@@ -39,6 +42,7 @@ function TaskForm() {
                         e.preventDefault();
                         setAbrirCrearTarea(false);
                         setFechaVencimiento(fechaHoy());
+                        limpiarFormularioTareas()
                     }}>
                     <img src="/icons/close.png" alt="close" className="w-[30px] h-[30px] md:w-[35px] md:h-[35px]" />
                 </button>
@@ -93,7 +97,7 @@ function TaskForm() {
                     </button>
 
                     {/* Fecha */}
-                    <div className="w-full p-2 flex bg-white rounded-xl transition-transform hover:scale-105 active:scale-95">
+                    <div className={`${repeticion !== 'ninguna' ? 'opacity-50 cursor-not-allowed grayscale' : ''} w-full p-2 flex bg-white rounded-xl transition-transform hover:scale-105 active:scale-95`}>
                         <img src="/icons/calendar_green.png" alt="calendar" className="mr-2 w-5 h-5 shrink-0" />
                         <input
                             type="date"
@@ -102,8 +106,26 @@ function TaskForm() {
                             value={fechaVencimiento}
                             onChange={(e) => setFechaVencimiento(e.target.value)}
                             onClick={(e) => e.target.showPicker()}
-                            className="font-inter text-sm text-[#007011] cursor-pointer bg-transparent outline-none w-full text-center"
+                            disabled={repeticion !== 'ninguna'}
+                            className={`${repeticion !== 'ninguna' ? 'opacity-50 cursor-not-allowed grayscale' : ''} font-inter text-sm text-[#007011] cursor-pointer bg-transparent outline-none w-full text-center`}
                         />
+                    </div>
+                    {/*REPETICIÓN */}
+                      <div className="w-full p-2 items-center flex bg-white rounded-xl transition-transform hover:scale-105 active:scale-95">
+                        <label htmlFor="repeticion_select" className="shrink-0">
+                            <img src="/icons/timer.png" alt="icono repeticion" className="w-5 h-5" />
+                        </label>
+                        <select
+                            className="appearance-none font-inter text-sm flex-1 text-center text-[#007011] cursor-pointer focus:outline-none bg-transparent"
+                            name="repeticion"
+                            id="repeticion_select"
+                            value={repeticion}
+                            onChange={(e) => setRepeticion(e.target.value)}>
+                                <option selected value='ninguna'>Repetición</option>
+                                <option value="diaria">Diaria</option>
+                                <option value="entre-semana">Entre semana</option>
+                                <option value="fin-de-semana">Fin de semana</option>
+                        </select>
                     </div>
                 </div>
                 <button
