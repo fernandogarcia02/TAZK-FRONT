@@ -7,6 +7,8 @@ import useTasksContext from '../hooks/useTasksContext.js';
 import useListsContext from '../hooks/useListsContext.js';
 import Sidebar from '../components/Sidebar.jsx';
 import Cargando from '../components/Cargando.jsx';
+import useUsersContext from '../hooks/useUsersContext.js';
+import FotoModal from '../components/FotoModal.jsx';
 
 
 
@@ -21,6 +23,7 @@ const Lista = () =>{
     cargandoTarea
     
   } = useTasksContext();
+  const {abrirModalFoto} = useUsersContext();
   const {modalCrearLista, cargandoLista} = useListsContext();
     return (
         <div className='bg-white min-h-screen w-full flex'>
@@ -28,6 +31,7 @@ const Lista = () =>{
       {abrirCrearTarea && (
         <TaskForm />
       )}
+      {abrirModalFoto && <FotoModal/>}
       
       <Sidebar/>
 

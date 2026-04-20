@@ -12,12 +12,15 @@ import Error from "../components/Error";
 import Cargando from "../components/Cargando";
 import '../assets/styles/calendario.css'
 import { API_URL } from '../config/urls';
+import useUsersContext from "../hooks/useUsersContext";
+import FotoModal from "../components/FotoModal";
 
 
 function Calendario() {
     const calendarRef = useRef(null);
     const { items, modalAbierto, abrirCrearTarea, setFechaVencimiento, modalCrearTarea, abrirModal, refrescarTareas, errorTarea, setErrorTarea, cargandoTarea } = useTasksContext();
     const { modalCrearLista, cargandoLista } = useListsContext();
+    const {abrirModalFoto} = useUsersContext();
 
     useEffect(() => {
         document.title = "Calendario - TAZK";
@@ -157,6 +160,7 @@ function Calendario() {
             {cargandoTarea && (
                 <Cargando />
             )}
+            {abrirModalFoto && <FotoModal/>}
 
             {cargandoLista && (
                 <Cargando />

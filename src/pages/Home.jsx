@@ -8,6 +8,8 @@ import Sidebar from '../components/Sidebar.jsx';
 import useListsContext from '../hooks/useListsContext.js';
 import React, { useEffect } from 'react';
 import Cargando from '../components/Cargando.jsx';
+import useUsersContext from '../hooks/useUsersContext.js';
+import FotoModal from '../components/FotoModal.jsx';
 
 
 
@@ -24,7 +26,9 @@ const Home = () =>{
   const {
     cargandoLista
   } = useListsContext();
-
+  const {
+    abrirModalFoto
+  } = useUsersContext();
   useEffect(() => {
         document.title = "Home - TAZK";
     }, []);
@@ -35,6 +39,9 @@ const Home = () =>{
 
       {abrirCrearTarea && (
         <TaskForm />
+      )}
+      {abrirModalFoto && (
+        <FotoModal/>
       )}
 
       {errorTarea && (
