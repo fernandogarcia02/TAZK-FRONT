@@ -8,6 +8,8 @@ import Error from '../components/Error.jsx';
 import Sidebar from '../components/Sidebar.jsx';
 import Cargando from '../components/Cargando.jsx';
 import { useEffect } from 'react';
+import useUsersContext from '../hooks/useUsersContext.js';
+import FotoModal from '../components/FotoModal.jsx';
 
 
 
@@ -22,6 +24,7 @@ const Importantes = () =>{
     cargandoTarea
     
   } = useTasksContext();
+  const {abrirModalFoto} = useUsersContext();
   const {modalCrearLista, cargandoLista} = useListsContext();
   useEffect(() => {
           document.title = "Importantes - TAZK";
@@ -34,6 +37,8 @@ const Importantes = () =>{
       {abrirCrearTarea && (
         <TaskForm />
       )}
+
+      {abrirModalFoto && <FotoModal/>}
       
       <Sidebar/>
 

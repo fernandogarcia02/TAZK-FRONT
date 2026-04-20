@@ -8,6 +8,8 @@ import Error from '../components/Error.jsx';
 import Sidebar from '../components/Sidebar.jsx';
 import { useEffect } from 'react';
 import Cargando from '../components/Cargando.jsx';
+import useUsersContext from '../hooks/useUsersContext.js';
+import FotoModal from '../components/FotoModal.jsx';
 
 
 
@@ -22,6 +24,7 @@ const Proximas = () => {
     cargandoTarea
 
   } = useTasksContext();
+  const {abrirModalFoto} = useUsersContext();
   const { modalCrearLista,cargandoLista } = useListsContext();
   useEffect(() => {
     document.title = "Proximas Tareas - TAZK";
@@ -33,6 +36,7 @@ const Proximas = () => {
         <TaskForm />
       )}
 
+
       <Sidebar />
 
 
@@ -41,6 +45,7 @@ const Proximas = () => {
       {modalCrearLista && (
         <CrearLista />
       )}
+      {abrirModalFoto && <FotoModal/>}
 
       {modalAbierto && (
         <TaskModal />

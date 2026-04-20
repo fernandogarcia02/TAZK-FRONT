@@ -8,6 +8,8 @@ import Sidebar from '../components/Sidebar.jsx';
 import Error from '../components/Error.jsx';
 import { useEffect } from 'react';
 import Cargando from '../components/Cargando.jsx';
+import useUsersContext from '../hooks/useUsersContext.js';
+import FotoModal from '../components/FotoModal.jsx';
 
 
 
@@ -22,6 +24,7 @@ const Terminadas = () => {
     cargandoTarea
 
   } = useTasksContext();
+  const {abrirModalFoto} = useUsersContext();
   const { modalCrearLista, cargandoLista } = useListsContext();
   useEffect(() => {
     document.title = "Terminadas - TAZK";
@@ -41,6 +44,7 @@ const Terminadas = () => {
       {modalCrearLista && (
         <CrearLista />
       )}
+      {abrirModalFoto && <FotoModal/>}
 
       {modalAbierto && (
         <TaskModal />

@@ -10,6 +10,8 @@ import Sidebar from "../components/Sidebar";
 import { NavLink } from "react-router-dom";
 import { useEffect } from "react";
 import Cargando from "../components/Cargando";
+import useUsersContext from "../hooks/useUsersContext";
+import FotoModal from "../components/FotoModal";
 
 function Listas() {
     const {
@@ -22,6 +24,7 @@ function Listas() {
         modalEditarLista,
         cargandoLista
     } = useListsContext();
+    const {abrirModalFoto} = useUsersContext();
 
     const { modalAbierto, abrirCrearTarea, errorTarea,setErrorTarea,cargandoTarea } = useTasksContext();
     useEffect(() => {
@@ -35,6 +38,7 @@ function Listas() {
 
             {/* Modales - Todos con z-index alto ya configurado */}
             {abrirCrearTarea && <TaskForm />}
+            {abrirModalFoto && <FotoModal/>}
             {modalCrearLista && <CrearLista />}
             {modalEditarLista && <ListModal />}
             {modalAbierto && <TaskModal />}

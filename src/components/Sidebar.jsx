@@ -10,7 +10,7 @@ const Sidebar = () => {
     const [isOpen, setIsOpen] = useState(false); // Estado para el menú móvil
 
     const { listas, setModalCrearLista, modalCrearLista,comprobarListas } = useListsContext();
-    const { cerrarSesion, perfil } = useUsersContext();
+    const { cerrarSesion, perfil, setAbrirModalFoto } = useUsersContext();
     const { modalCrearTarea,error,setError } = useTasksContext();
 
     const fotoPerfil = perfil?.fotoPerfil;
@@ -56,7 +56,7 @@ const Sidebar = () => {
                 {/* Cabecera Perfil */}
                 <div className="flex items-center h-20 md:h-1/10 pl-5">
                     <div id="foto-perfil" className="w-[50px] h-[50px] rounded-full overflow-hidden border-2 border-[#007011]">
-                        <img src={urlFoto} alt="foto de perfil" className="h-full w-full object-cover" />
+                        <img src={urlFoto} onClick={()=>setAbrirModalFoto(true)} alt="foto de perfil" className="h-full w-full object-cover" />
                     </div>
                     <div id="nombre-perfil" className="pl-2">
                         <p className="font-poppins font-bold text-[#007011] truncate max-w-[150px]">

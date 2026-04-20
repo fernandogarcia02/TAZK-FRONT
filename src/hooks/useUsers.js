@@ -15,6 +15,7 @@ function useUsers() {
     const [exito, setExito] = useState('');
     const [perfil, setPerfil] = useState(null);
     const [cargando, setCargando] = useState(false);
+    const [abrirModalFoto, setAbrirModalFoto] = useState(false);
     const navigate = useNavigate();
 
 
@@ -362,7 +363,9 @@ function useUsers() {
         cambiarPassword,
         cargando,
         setCargando,
-        reenviarEmail
+        reenviarEmail,
+        abrirModalFoto,
+        setAbrirModalFoto
     }
 }
 
