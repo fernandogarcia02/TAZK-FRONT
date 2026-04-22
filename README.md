@@ -1,16 +1,22 @@
-# React + Vite
+# 🚀 Tazk — Gestor de Tareas Full Stack
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Tazk** es una aplicación web intuitiva diseñada para optimizar la productividad personal. Permite a los usuarios gestionar sus tareas diarias en un entorno seguro, con un diseño moderno y funcional.
 
-Currently, two official plugins are available:
+## 🛠️ Tecnologías utilizadas
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+* **Frontend:** React.js, Tailwind CSS.
+* **Backend:** Node.js, Express.
+* **Base de Datos:** MongoDB (Mongoose).
+* **Autenticación:** JSON Web Tokens (JWT) y Google Auth.
+* **Almacenamiento:** Cloudinary (Gestión de imágenes de perfil).
 
-## React Compiler
+## ✨ Características principales
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+* **Gestión de Tareas:** Crear, editar y eliminar tareas en tiempo real.
+* **Perfil de Usuario:** Personalización de perfil con subida de fotos optimizada.
+* **Autenticación Segura:** Sistema de login propio y soporte para Google.
+* **Diseño Responsive:** Adaptado para móviles y escritorio.
 
-## Expanding the ESLint configuration
+## 📸 Vista previa
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+<img width="1919" height="898" alt="Aplicacion TAZK" src="https://github.com/user-attachments/assets/8a2718a5-50aa-461a-aa2c-f97504834c4d" />
