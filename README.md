@@ -1,5 +1,11 @@
 # 🚀 Tazk — Gestor de Tareas Full Stack
 
+<div align="center">
+  <a href="https://tazk.es" target="_blank">
+    <img src="https://img.shields.io/badge/ABRIR_APLICACIÓN-2ea44f?style=for-the-badge&logo=rocket&logoColor=white" />
+  </a>
+</div>
+
 **Tazk** es una aplicación web intuitiva diseñada para optimizar la productividad personal. Permite a los usuarios gestionar sus tareas diarias en un entorno seguro, con un diseño moderno y funcional.
 > 🖥️ **Nota técnica:** Este proyecto está dividido en dos repositorios. Puedes encontrar la lógica del servidor, la base de datos y la configuración de la API en el [Repositorio del Backend](https://github.com/fernandogarcia02/TAZK-BACK)
 
