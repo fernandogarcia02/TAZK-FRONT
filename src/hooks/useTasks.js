@@ -403,7 +403,6 @@ function useTasks() {
     agregarItem,
     borrarItem,
     toggleCompleted,
-    editarItem,
     prioridad,
     setPrioridad,
     text,
