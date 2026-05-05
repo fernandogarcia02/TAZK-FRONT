@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { API_URL } from '../config/urls';
 import useUsersContext from '../hooks/useUsersContext';
-
+//Modal para poder cambiar la foto de perfil
 const FotoModal = () => {
     const [archivo, setArchivo] = useState(null);
     const [preview, setPreview] = useState(null);
@@ -10,6 +10,7 @@ const FotoModal = () => {
     // Extraemos todo lo necesario del context
     const { setAbrirModalFoto,error,setError,perfil, obtenerPerfil } = useUsersContext();
 
+    //Función para cuando cambie el input de subir la foto
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -23,15 +24,18 @@ const FotoModal = () => {
         }
     };
 
+    //Función para cuando se ejecute el enviar
     const handleSubmit = async (e) => {
         setError('');
         e.preventDefault();
         if (!archivo) return;
 
+        //Para mostrar que se está subiendo el archivo
         setSubiendo(true);
         const formData = new FormData();
         formData.append('foto', archivo);
 
+        //llamada al servidor
         try {
             const token = localStorage.getItem('token_usuario');
             const respuesta = await fetch(`${API_URL}/usuarios/actualizar-foto`, {
@@ -65,6 +69,7 @@ const FotoModal = () => {
             {/* Cabecera: Reducimos padding en móvil para ganar espacio */}
             <div className="flex justify-between items-center p-5 sm:p-6 border-b border-white/20">
                 <h2 className="text-lg sm:text-xl font-inter font-bold text-white">Actualizar perfil</h2>
+                {/*Botón para cerrar el modal*/}
                 <button
                     onClick={() => {setAbrirModalFoto(false); setError('')}}
                     className="text-white cursor-pointer hover:opacity-70 text-3xl leading-none"
@@ -77,11 +82,14 @@ const FotoModal = () => {
                 {/* Avatar: Un poco más pequeño en móviles muy estrechos */}
                 <div className="flex flex-col items-center justify-center mb-6">
                     <div className="relative w-28 h-28 sm:w-32 sm:h-32 mb-4">
+                        {/*Aquí o mostramos la foto de perfil actual que tiene el usuario o el preview de la que se ha subido*/}
                         <img
                             src={preview || perfil?.fotoPerfil}
                             alt="Vista previa"
                             className="w-full h-full object-cover rounded-full border-4 border-white shadow-md"
                         />
+
+                        {/*Label donde hay que pulsar para poder subir la imagen*/}
                         <label
                             htmlFor="input-foto"
                             className="absolute bottom-0 right-0 bg-white text-[#007011] w-9 h-9 sm:w-10 sm:h-10 rounded-full cursor-pointer hover:scale-110 transition-transform shadow-lg flex items-center justify-center text-lg"
@@ -92,6 +100,7 @@ const FotoModal = () => {
                     <p className="text-xs sm:text-sm font-inter text-gray-200 text-center">Toca la cámara para elegir foto</p>
                 </div>
 
+                {/*Input oculto donde se sube la imagen*/}
                 <input
                     id="input-foto"
                     type="file"
@@ -100,13 +109,14 @@ const FotoModal = () => {
                     className="hidden"
                 />
 
+                {/*Si hay algún error al subir la imagen lo mostramos*/}
                 {error && (
                     <p className="text-red-600 text-xs sm:text-sm mb-4 text-center bg-red-50 p-2.5 rounded-xl border border-red-200">
                         {error}
                     </p>
                 )}
 
-                {/* Botones: Se apilan en pantallas extra pequeñas si el texto es largo */}
+                {/* Botones para subir la foto o cancelar: Se apilan en pantallas extra pequeñas si el texto es largo */}
                 <div className="flex flex-row gap-3 mt-2">
                     <button
                         type="button"
@@ -124,6 +134,7 @@ const FotoModal = () => {
                             : 'bg-white text-[#007011] hover:bg-transparent hover:text-white cursor-pointer'
                         }`}
                     >
+                        {/*Para mostrar al usuario si la foto está en proceso de subirse y que tarda un poco*/}
                         {subiendo ? (
                             <div className="flex items-center gap-2">
                                 <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>

@@ -1,7 +1,9 @@
 import useTasksContext from '../hooks/useTasksContext';
 import TaskItem from './TaskItem';
 
+//Componente para listar las tareas importantes
 function TaskListImportantes() {
+  //Nos traemos el estado donde estan todas las tareas
   const { items } = useTasksContext();
 
   // Filtramos solo las que tienen prioridad activada

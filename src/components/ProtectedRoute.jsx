@@ -1,5 +1,6 @@
 import { Navigate } from 'react-router-dom';
 
+//Componente de seguridad para que no se pueda acceder a las paginas que se require estar registrado
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem('token_usuario');
 

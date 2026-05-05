@@ -1,9 +1,12 @@
 import useTasksContext from '../hooks/useTasksContext';
 import TaskItem from './TaskItem';
 
+//Componente para imprimir todas las tareas que ya han sido terminadas
 function TaskListTerminadas() {
+  //importamos el estado donde guardamos todas las tareas
   const { items } = useTasksContext();
 
+  //filtramos para solo imprimir las tareas que han sido marcadas como terminadas
   const tareasTerminadas = items.filter((task) => task.completed);
 
   return (

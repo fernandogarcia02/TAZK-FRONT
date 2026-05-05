@@ -9,7 +9,7 @@ import Exito from '../components/Exito';
 import { API_URL } from '../config/urls';
 import Cargando from '../components/Cargando';
 
-
+//página donde el usuario se loguea
 const Login = () => {
   const {
     email,
@@ -33,6 +33,7 @@ const Login = () => {
   const { imprimirListas } = useListsContext();
   const navigate = useNavigate();
 
+  //función para el login con google
   const alTenerExito = async (credentialResponse) => {
 
     setCargando(true);
@@ -152,7 +153,6 @@ const Login = () => {
           </div>
         </div>
 
-        {/* Links aligned with inputs */}
         <div className='flex justify-between w-full max-w-[350px] md:pl-4 py-4 px-8 md:px-0'>
           <a className='text-blue-400 text-[12px] md:text-sm font-bold font-inter cursor-pointer hover:underline' onClick={()=>navigate('/olvide-password')}>¿Has olvidado tu contraseña?</a>
           <a className='text-blue-400 text-[12px] md:text-sm font-bold font-inter cursor-pointer hover:underline' onClick={() => navigate('/registro')}>Únete</a>

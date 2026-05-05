@@ -1,3 +1,4 @@
+/*Componente con un spinner para mostrar al usuario que la aplicación está cargando y no pueda hacer nada*/ 
 function Cargando() {
     return (
         /* min-h-[100dvh] asegura el centro real en móviles ignorando las barras del navegador */

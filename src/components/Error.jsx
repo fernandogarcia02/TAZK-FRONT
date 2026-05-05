@@ -1,9 +1,10 @@
 import useTasksContext from "../hooks/useTasksContext";
 import { useEffect } from "react";
 import useUsersContext from "../hooks/useUsersContext";
-
+/*Componente para monstrar los errores*/
 function Error({ mensaje, cerrar }) {
     const { reenviarEmail } = useUsersContext();
+    /*UseEffect para que el mensaje se cierre automáticamente*/
     useEffect(() => {
         if (mensaje) {
             const timer = setTimeout(() => {
@@ -16,7 +17,7 @@ function Error({ mensaje, cerrar }) {
     // Si no hay error, no renderizamos nada
     if (!mensaje) return null;
 
-
+    //Para que si el mensaje es el de cuenta no activada el usuario pueda reenviar email de activación
     if (mensaje.includes('REENVIAR_EMAIL')) {
 
         return (
@@ -43,7 +44,7 @@ function Error({ mensaje, cerrar }) {
 
 
 
-
+//mensaje normal de error
     return (
         /* z-[200] para que esté por encima de todos los modales (que tienen 100 o 110) */
         <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[200] w-[92%] max-w-md animate-bounce-in">
@@ -51,11 +52,13 @@ function Error({ mensaje, cerrar }) {
 
                 <div className="flex items-center gap-3">
                     <span className="text-2xl shrink-0">⚠️</span>
+                    {/*MENSAJE*/}
                     <p className="font-inter font-semibold text-sm md:text-base leading-tight">
                         {mensaje}
                     </p>
                 </div>
 
+                {/*Boton para cerrar el mensaje de error*/ }
                 <button
                     onClick={() => { cerrar() }}
                     className="ml-4 p-2 bg-white/20 rounded-full hover:bg-white/40 transition-colors active:scale-90"

@@ -1,11 +1,13 @@
 import useTasksContext from '../hooks/useTasksContext';
 import TaskItem from './TaskItem';
 
+//Componente para listar las tareas de hoy
 function TaskList() {
+  //Nos traemos el estado donde guardamos todos los items
   const { items } = useTasksContext();
 
+  //filtramos para imprimir solo las tareas de hoy
   const hoy = new Date().toLocaleDateString();
-
   const tareasHoy = items.filter((task) =>{
     // Asegúrate de que task.fechaVencimiento sea una fecha válida
     const fechaTarea = new Date(task.fechaVencimiento).toLocaleDateString();

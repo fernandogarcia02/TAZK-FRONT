@@ -1,8 +1,13 @@
 import useTasksContext from '../hooks/useTasksContext';
 import TaskItem from './TaskItem';
-
+//Componente para imprimir las proximas tareas del usuairo tanto las de hoy como las del futuro
 function TaskListProximas() {
+  //Importamos el estado donde guardamos las tareas
   const { items } = useTasksContext();
+
+  //filtramos para imprimir solo las no completadas
+  
+  const proximasTareas = items.filter((task) => !task.completed);
 
   return (
     /* Cambiamos h-[100vh] por min-h-[100dvh] para el navegador del móvil
@@ -22,8 +27,8 @@ function TaskListProximas() {
         
         {/* Lista de tareas con margen superior y separación entre items */}
         <ul className='mt-6 flex flex-col gap-2 pb-10'>
-          {items.length > 0 ? (
-            items.map((task) => (
+          {proximasTareas.length > 0 ? (
+            proximasTareas.map((task) => (
               <TaskItem key={task._id} task={task} />
             ))
           ) : (

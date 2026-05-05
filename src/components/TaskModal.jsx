@@ -1,7 +1,9 @@
 import useTasksContext from "../hooks/useTasksContext";
 import useListsContext from "../hooks/useListsContext";
 
+//Componente que usamos para editar una tarea
 function TaskModal() {
+    //Importamos todos los estados y funciones necesarias
     const {
         taskEditar,
         setTaskEditar,
@@ -17,7 +19,6 @@ function TaskModal() {
         setModalAbierto,
         borrarItem,
     } = useTasksContext();
-
     const {
         listas,
         editarLista,
@@ -33,6 +34,7 @@ function TaskModal() {
 
                 <h2 className="font-poppins text-white text-[22px] md:text-[25px] text-center">Tarea</h2>
 
+                {/*botón para cerrar el modal*/}
                 <button
                     className="absolute top-4 right-4 md:top-5 md:right-6 hover:scale-110 transition-transform cursor-pointer z-10"
                     onClick={(e) => {
@@ -47,14 +49,15 @@ function TaskModal() {
                     }}>
                     <img src="/icons/close.png" alt="close" className="w-[30px] h-[30px] md:w-[35px] md:h-[35px]" />
                 </button>
-
+                
+                {/*TITULO de la tarea*/}
                 <input type="text"
                     className="font-inter text-lg md:text-xl placeholder:text-white/70 placeholder:font-bold text-white rounded p-3 outline-none focus:bg-white/20 transition-all"
                     value={editarTexto}
                     onChange={(e) => setEditarTexto(e.target.value)}
                     placeholder="TÍTULO"
                 />
-
+                {/*DESCRIPCION de la tarea*/}
                 <textarea className="font-inter text-sm md:text-base placeholder:text-white/70 text-white rounded p-3 outline-none resize-none"
                     value={editarDescription}
                     rows={window.innerWidth < 768 ? "6" : "8"}

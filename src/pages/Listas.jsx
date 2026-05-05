@@ -13,6 +13,7 @@ import Cargando from "../components/Cargando";
 import useUsersContext from "../hooks/useUsersContext";
 import FotoModal from "../components/FotoModal";
 
+//en esta página mostramos todas las listas que ha creado el usuario
 function Listas() {
     const {
         listas,
@@ -32,11 +33,9 @@ function Listas() {
     }, []);
 
     return (
-        /* Cambiamos flex por flex-col md:flex-row para que en móvil el Sidebar y 
-           el contenido no se peleen por el espacio horizontal */
+        
         <div className='bg-white min-h-[100dvh] w-full flex flex-col md:flex-row'>
 
-            {/* Modales - Todos con z-index alto ya configurado */}
             {abrirCrearTarea && <TaskForm />}
             {abrirModalFoto && <FotoModal/>}
             {modalCrearLista && <CrearLista />}
@@ -56,19 +55,17 @@ function Listas() {
 
             <Sidebar />
 
-            {/* Contenido Principal: w-full en móvil, w-4/5 en escritorio */}
             <div className="min-h-screen w-full md:w-4/5 flex flex-col">
 
-                {/* Espaciador superior para el botón de menú móvil */}
                 <div className="h-20 md:h-1/10 shrink-0"></div>
 
-                {/* Padding: px-6 en móvil para que las listas respiren, pl-20 en escritorio */}
                 <div className="flex-1 px-6 md:pl-20 md:pr-10">
                     <h2 className="font-bold font-poppins text-center md:text-left text-3xl md:text-[50px] leading-none text-[#007011]">
                         LISTAS
                     </h2>
 
                     <ul className="mt-6 pb-10">
+                        {/*imprimimos todas las listas*/}
                         {listas.map((lista) => (
                             <li
                                 className="flex items-center justify-between py-5 md:py-6 border-b border-gray-400 mr-0 md:mr-20"
@@ -82,6 +79,7 @@ function Listas() {
                                 </NavLink>
 
                                 <div className="flex items-center shrink-0">
+                                    {/*botones para eliminar o editar el nombre de la lista*/}
                                     <button
                                         onClick={() => abrirModal(lista)}
                                         className="p-2 cursor-pointer hover:scale-110 transition-all active:scale-90"

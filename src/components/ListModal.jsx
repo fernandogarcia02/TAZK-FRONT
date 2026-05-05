@@ -1,6 +1,8 @@
 import useListsContext from "../hooks/useListsContext";
-
+//Componente para editar el nombre de una lista
 function ListModal() {
+
+    //importamos los estados y funciones necesarias
     const { nuevoNombre, listaAEditar, setNuevoNombre, setListaAEditar, editarList, setModalEditarLista } = useListsContext();
 
     return (
@@ -15,7 +17,7 @@ function ListModal() {
                 <h2 className="absolute top-6 left-1/2 -translate-x-1/2 text-white font-bold font-inter text-lg md:text-xl uppercase whitespace-nowrap">
                     Editar Lista
                 </h2>
-
+                {/*Boton para cerrar el modal*/}
                 <button
                     className="absolute top-4 right-4 md:top-5 md:right-6 hover:scale-110 transition-transform cursor-pointer"
                     onClick={(e) => {

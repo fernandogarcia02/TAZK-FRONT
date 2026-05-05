@@ -1,5 +1,5 @@
 import useListsContext from "../hooks/useListsContext";
-
+/*Componente formulario simple para poner nombre de lista y crear*/ 
 function CrearLista() {
     const { nombreLista, setNombreLista, crearLista, setModalCrearLista } = useListsContext();
 
@@ -13,7 +13,7 @@ function CrearLista() {
                 <h2 className="absolute top-6 left-1/2 -translate-x-1/2 text-white font-bold font-inter text-lg md:text-xl uppercase whitespace-nowrap">
                     Crear Lista
                 </h2>
-
+                 {/*Botón X para cerrar el componente*/} 
                 <button
                     className="absolute top-4 right-4 md:top-5 md:right-6 hover:scale-110 transition-transform cursor-pointer z-10"
                     onClick={(e) => {
@@ -23,7 +23,7 @@ function CrearLista() {
                     <img src="/icons/close.png" alt="close" className="w-[30px] h-[30px] md:w-[35px] md:h-[35px]" />
                 </button>
 
-                {/* Input y Botón: Se apilan en móvil, se alinean en escritorio */}
+                {/* Input para poner nombre lista y Botón para crear lista: Se apilan en móvil, se alinean en escritorio */}
                 <div className="flex flex-col md:flex-row items-center justify-between gap-4 mt-12 md:mt-0">
                     <input
                         type="text"

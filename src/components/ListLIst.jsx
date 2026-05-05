@@ -1,6 +1,7 @@
 import useListsContext from "../hooks/useListsContext";
 import { NavLink } from "react-router-dom";
 
+//Componente para listar las listas
 function ListList() {
     const {listas} = useListsContext();
       const linkStyle = ({isActive}) =>{

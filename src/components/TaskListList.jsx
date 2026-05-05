@@ -4,17 +4,22 @@ import TaskItem from './TaskItem';
 import useListsContext from '../hooks/useListsContext';
 import React, { useEffect } from 'react';
 
+//Componente para imprimir las tareas que son de una lista en concreto
 function TaskListList() {
+  //Importamos los estados necesarios tanto el de tareas como las listas
   const { items } = useTasksContext();
   const { id } = useParams();
   const { listas } = useListsContext();
 
+  //buscamos la lista en concreto que necesitamos
   const lista = listas.find((list) => list._id === id);
 
+  //filtramos para imprimir solo las tareas que pertenecen a esa lista
   const tareasLista = items.filter((task) => {
     return task.list_id === id;
   });
 
+  //Use effect para poner el nombre de la lista en el titulo de la pestaña
   useEffect(() => {
     if (lista?.nombre) {
       document.title = `${lista.nombre} - TAZK`;

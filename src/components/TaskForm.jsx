@@ -1,7 +1,8 @@
 import useTasksContext from "../hooks/useTasksContext";
 import useListsContext from "../hooks/useListsContext";
-
+//Componente donde se crea la tarea
 function TaskForm() {
+    //Importamos todos los estados y funciones necesarias
     const {
         text,
         setText,
@@ -36,6 +37,7 @@ function TaskForm() {
 
                 <h2 className="font-poppins text-white text-[22px] md:text-[25px] text-center">Tarea</h2>
 
+                {/*Botón para cerrar el modal*/}
                 <button
                     className="absolute top-4 right-4 md:top-5 md:right-6 hover:scale-110 transition-transform cursor-pointer z-10"
                     onClick={(e) => {
@@ -47,6 +49,7 @@ function TaskForm() {
                     <img src="/icons/close.png" alt="close" className="w-[30px] h-[30px] md:w-[35px] md:h-[35px]" />
                 </button>
 
+                {/*TITULO de la tarea*/}
                 <input type="text"
                     className="font-inter text-lg md:text-xl placeholder:text-white/70 placeholder:font-bold text-white rounded p-3 outline-none focus:bg-white/20 transition-all"
                     value={text}
@@ -55,6 +58,7 @@ function TaskForm() {
                     placeholder="TÍTULO"
                 />
 
+                {/*DESCRIPCIÓN de la tarea*/}
                 <textarea className="font-inter text-sm md:text-base placeholder:text-white/70 text-white rounded p-3 outline-none resize-none"
                     value={description}
                     rows={window.innerWidth < 768 ? "6" : "8"}
@@ -65,7 +69,7 @@ function TaskForm() {
                 {/* Quitamos el md:flex-row para que siempre sea flex-col (uno debajo del otro) */}
                 <div className="flex flex-col gap-4 md:pt-6 w-[150px]">
 
-                    {/* Lista Select */}
+                    {/*Select para seleccionar la lista */}
                     <div className="w-full p-2 items-center flex bg-white rounded-xl transition-transform hover:scale-105 active:scale-95">
                         <label htmlFor="lista_select" className="shrink-0">
                             <img src="/icons/icono_lista.png" alt="icono lista" className="w-5 h-5" />
@@ -82,7 +86,7 @@ function TaskForm() {
                         </select>
                     </div>
 
-                    {/* Botón Importante */}
+                    {/* Botón para activar si una tarea es importante*/}
                     <button
                         type="button"
                         className={`flex cursor-pointer items-center font-inter w-full bg-white rounded-xl p-2 transition-transform hover:scale-105 active:scale-95
@@ -115,6 +119,7 @@ function TaskForm() {
                         <label htmlFor="repeticion_select" className="shrink-0">
                             <img src="/icons/timer.png" alt="icono repeticion" className="w-5 h-5" />
                         </label>
+                        {/*Select para seleccionar el tipo de repetición*/}
                         <select
                             className="appearance-none font-inter text-sm flex-1 text-center text-[#007011] cursor-pointer focus:outline-none bg-transparent"
                             name="repeticion"
@@ -128,6 +133,7 @@ function TaskForm() {
                         </select>
                     </div>
                 </div>
+                {/*Botón para guardar la tarea*/}
                 <button
                     className="font-inter mt-6 md:absolute md:bottom-10 md:right-10 text-white border border-white bg-[#7B9F7D] rounded-xl p-3 md:p-2 w-full md:w-30 hover:scale-105 transition-transform cursor-pointer active:scale-95 shadow-md"
                     onClick={(e) => {

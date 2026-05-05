@@ -12,7 +12,7 @@ import useUsersContext from '../hooks/useUsersContext.js';
 import FotoModal from '../components/FotoModal.jsx';
 
 
-
+//página inicial del usuario
 const Home = () =>{
 
     // Hook

@@ -5,6 +5,7 @@ import useListsContext from '../hooks/useListsContext';
 import useTasksContext from '../hooks/useTasksContext';
 import { API_URL } from '../config/urls';
 
+//página que se entra si pulsas en confirmar cuenta en el email enviado
 const ConfirmarCuenta = () => {
     const [confirmado, setConfirmado] = useState(false);
     const [cargando, setCargando] = useState(true);

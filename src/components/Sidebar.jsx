@@ -5,21 +5,25 @@ import useListsContext from "../hooks/useListsContext";
 import useTasksContext from "../hooks/useTasksContext";
 import ListList from "./ListLIst";
 
+//Componente para el menú lateral
 const Sidebar = () => {
     const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false); // Estado para el menú móvil
 
+    //importamos los estados y las funciones necesarias
     const { listas, setModalCrearLista, modalCrearLista,comprobarListas } = useListsContext();
     const { cerrarSesion, perfil, setAbrirModalFoto } = useUsersContext();
     const { modalCrearTarea,error,setError } = useTasksContext();
 
     const fotoPerfil = perfil?.fotoPerfil;
+    //Condicional para elegir la foto perfil correcta. Si hay foto perfil pasamos al siguiente condicional(si foto perfil empieza por http entonces ponemos la foto de perfil de google o la que esté giardada en la nube) si no elegimos avatar predeterminado
     const urlFoto = fotoPerfil 
         ? (fotoPerfil.startsWith('http') 
             ? fotoPerfil 
             : `http://localhost:3000${fotoPerfil}`) 
         : '/icons/account.png';
 
+    //estilos para las entradas del menú. El isActive se aplica cuando el usuario está dentro de esa página
     const linkStyle = ({ isActive }) => {
         const estiloResaltado = "bg-[#D9D9D9]/50 rounded-xl";
         const estiloNormal = "hover:bg-[#D9D9D9]/50 rounded-xl";
@@ -55,9 +59,12 @@ const Sidebar = () => {
             >
                 {/* Cabecera Perfil */}
                 <div className="flex items-center h-20 md:h-1/10 pl-5">
+                    
+                    {/*Foto de perfil*/}
                     <div id="foto-perfil" className="w-[50px] h-[50px] rounded-full overflow-hidden border-2 border-[#007011]">
                         <img src={urlFoto} onClick={()=>setAbrirModalFoto(true)} alt="foto de perfil" className="h-full w-full object-cover" />
                     </div>
+                    {/*Nombre del usuario*/}
                     <div id="nombre-perfil" className="pl-2">
                         <p className="font-poppins font-bold text-[#007011] truncate max-w-[150px]">
                             {perfil?.nombre || localStorage.getItem('nombre_usuario')}
@@ -73,8 +80,9 @@ const Sidebar = () => {
                 <div id="tareas"
                     className="relative no-scrollbar rounded-t-[25px] md:rounded-r-[25px] font-inter bg-[#007011] h-full flex-1 overflow-y-auto pb-20"
                 >
+                    {/*Botón que abre el modal para crear Tareas*/}
                     <button onClick={() => { 
-                        
+                        {/*Controlamos que no se puedan crear tareas si no hay una lista*/ }
                         if (listas.length === 0){
                             setError("Deben haber listas para crear una tarea");
                             return;
@@ -89,6 +97,7 @@ const Sidebar = () => {
                     <h2 className="text-white font-bold text-[22px] md:text-[25px] pl-5 pt-4">Tareas</h2>
                     
                     <div className="mt-2">
+                        {/*Array con los destinos del menú y en el que ponemos cada link usando NavLink*/}
                         {[
                             { to: "/proximas", icon: "/icons/proximas_tareas.png", label: "Próximas" },
                             { to: "/home", icon: "/icons/hoy.png", label: "Hoy" },
@@ -103,17 +112,19 @@ const Sidebar = () => {
                         ))}
                     </div>
 
+                        {/*Cabecera de listas en la que podemos ir a la página Listas a ver todas las listas si pulsamos sobre ella*/ }
                     <div className="flex justify-between items-center py-3 px-5 mt-4">
                         <h2 className="text-white font-bold text-[22px] md:text-[25px]">Listas</h2>
                         <NavLink to="/listas" onClick={() => setIsOpen(false)}>
                             <img className='h-[20px] w-[20px] hover:translate-x-1 transition-transform' src="/icons/forward_white.png" alt="ir" />
                         </NavLink>
                     </div>
-
+                    {/*Aquí listamos todas las listas que tiene el usuario usando el componente ListList*/ }
                     <div className="max-h-[140px] overflow-y-auto custom-scrollbar">
                         <ListList />
                     </div>
 
+                    {/*Boton para añadir una lista nueva*/}
                     <button className="flex items-center pl-4 pt-4 opacity-80 hover:opacity-100 cursor-pointer"
                         onClick={() => setModalCrearLista(!modalCrearLista)}
                     >
@@ -121,6 +132,7 @@ const Sidebar = () => {
                         <span className="text-[#A7A7A7] pl-2 text-sm">Añadir Lista</span>
                     </button>
 
+                    {/*Botón para cerrar sesión*/}
                     <button
                         className="absolute flex left-6 bottom-5 items-center hover:scale-105 transition-all text-white cursor-pointer"
                         onClick={cerrarSesion}>

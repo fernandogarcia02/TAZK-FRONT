@@ -1,8 +1,11 @@
 import useTasksContext from '../hooks/useTasksContext';
 
+//Componente Tarea para taskList
 function TaskItem({ task }) {
+  //importamos los estados y funcionaes necesarias
   const { toggleCompleted, abrirModal } = useTasksContext();
 
+  //función que devuelve true or false en función de si ha pasado la fecha de vencimiento de la tarea o no.
   const vencida = () => {
     const hoy = new Date();
     const fechaTarea = new Date(task.fechaVencimiento);
@@ -10,9 +13,9 @@ function TaskItem({ task }) {
     const tareaSoloFecha = new Date(fechaTarea.getFullYear(), fechaTarea.getMonth(), fechaTarea.getDate());
     return tareaSoloFecha < hoySoloFecha && !task.completed;
   }
-
   const estaVencida = vencida();
 
+  //formateamos la fecha para que se vea como queramos Ej: 28 abr
   const formatearFecha = (fechaRaw) => {
     if(!fechaRaw) return "";
     const fecha = new Date(fechaRaw);
@@ -21,9 +24,9 @@ function TaskItem({ task }) {
       month: 'short'
     }).replace('.','');
   }
-
   const fechaFormateada = formatearFecha(task.fechaVencimiento);
 
+  //devolvemos un li para el ul de tasklist
   return (
     <li className='flex items-center justify-between py-4 md:py-6 border-b border-gray-400 mr-0 md:mr-20 group'> 
       
@@ -36,7 +39,8 @@ function TaskItem({ task }) {
           onChange={() => toggleCompleted(task._id)}
         />
         
-        {/* Usamos truncate para que nombres muy largos no rompan el diseño en móvil */}
+        {/* Usamos truncate para que nombres muy largos no rompan el diseño en móvil, en caso de que esté completada se verá resaltada en verde
+        en caso de que esté completada la pondremos que se vea menos tacharemos y en caso de que esté vencida la pondremos en amarillo */}
         <span className={`
           pl-3 md:pl-5 text-base md:text-[18px] truncate
           ${task.completed ? 'line-through opacity-50' : ''} 
@@ -46,6 +50,7 @@ function TaskItem({ task }) {
           {task.text}
         </span>
 
+        {/*Si está vencida le ponemos una señal de warning para advertir*/}
         {estaVencida && (
           <img src="/icons/warning.png" alt="vencida" className='pl-2 w-5 h-5 md:w-auto shrink-0' />
         )}
@@ -60,6 +65,7 @@ function TaskItem({ task }) {
           {fechaFormateada}
         </span>
         
+        {/*Botón flecha para abrir el editar tarea*/}
         <button
           className='p-2 -mr-2 cursor-pointer hover:scale-110 active:scale-90 transition-all duration-300'
           onClick={() => abrirModal(task)}

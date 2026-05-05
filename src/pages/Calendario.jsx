@@ -15,9 +15,11 @@ import { API_URL } from '../config/urls';
 import useUsersContext from "../hooks/useUsersContext";
 import FotoModal from "../components/FotoModal";
 
-
+//página donde tenemos el calendario
 function Calendario() {
+    //para crear una referencia
     const calendarRef = useRef(null);
+    //traemos todos los estados necesarios
     const { items, modalAbierto, abrirCrearTarea, setFechaVencimiento, modalCrearTarea, abrirModal, refrescarTareas, errorTarea, setErrorTarea, cargandoTarea } = useTasksContext();
     const { modalCrearLista, cargandoLista } = useListsContext();
     const {abrirModalFoto} = useUsersContext();
@@ -26,22 +28,25 @@ function Calendario() {
         document.title = "Calendario - TAZK";
     }, []);
 
+    //función para cambiar la vista del calendario
     const handleChangeView = (e) => {
-        const viewName = e.target.value;
-        const calendarApi = calendarRef.current.getApi();
-        calendarApi.changeView(viewName);
+        const viewName = e.target.value; //cogemos el valor del select ej:dayGridDay
+        const calendarApi = calendarRef.current.getApi(); //accedemos a la referencia
+        calendarApi.changeView(viewName);//usamos el método de fullcalendar para cambiar la vista
     };
 
+    //si pulsamos en una fecha guardamos la fecha en la que ha pulsado y abrimos para crear una tarea
     const handleDateClick = (arg) => {
         setFechaVencimiento(arg.dateStr);
         modalCrearTarea();
     }
 
+    //si pulsa en un evento(tarea) abrimos para editar la tarea
     const handleEventClick = (arg) => {
         const task = arg.event.extendedProps;
         abrirModal(task);
     }
-
+    //si arrastra una tarea a otra fecha la cambiamos
     const handleEventDrop = async (arg) => {
         const task = arg.event.extendedProps;
         const nuevaFecha = arg.event.startStr;
@@ -63,15 +68,17 @@ function Calendario() {
             console.error(error);
         }
     }
-
+    //aquí guardamos los eventos que mostramos después en el calendario
     const eventos = items.flatMap(task => {
         const hoy = new Date().toISOString().split('T')[0];
         const fechaTarea = task.fechaVencimiento ? task.fechaVencimiento.split('T')[0] : null;
+        //aquí ponemos las clases y depende de como sea cada tarea se mostrará de una forma u otra
         let clases = "tarea-base";
         if (task.completed) clases += " tarea-completada";
         if (task.priority && !task.completed) clases += " tarea-importante";
         if (fechaTarea && fechaTarea < hoy && !task.completed) clases += " tarea-vencida";
 
+        //Depende de si es periódica o no devolvemos un objeto u otro
         if (!task.repeticion || task.repeticion === 'ninguna') {
             return {
                 id: task._id,
@@ -90,7 +97,7 @@ function Calendario() {
 
         return {
             id: task._id,
-            title: `${task.text}`, // Icono para diferenciar que es recurrente
+            title: `${task.text}`, 
             daysOfWeek: diasRepeticion,
             startRecur: task.fechaCreacion || '2024-01-01', // Fecha desde la que empieza a aparecer
             className: clases + " tarea-recurrente",
@@ -122,9 +129,9 @@ function Calendario() {
                     </div>
                 </div>
 
-                {/* Este contenedor es el que fallaba: le damos un min-h en móvil */}
                 <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-100 p-1 md:p-2 min-h-[500px] md:min-h-0">
                     <FullCalendar
+                        //aqui ponemos la referencia para el cambio de vista
                         ref={calendarRef}
                         plugins={[dayGridPlugin, interactionPlugin]}
                         initialView={window.innerWidth < 768 ? "dayGridDay" : "dayGridMonth"}
