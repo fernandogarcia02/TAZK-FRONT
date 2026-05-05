@@ -15,7 +15,7 @@ function useTasks() {
   const [prioridad, setPrioridad] = useState(false);
   const [text, setText] = useState('');
   const [description, setDescription] = useState('');
-  const [fechaVencimiento, setFechaVencimiento] = useState(fechaHoy());
+  
   const [repeticion, setRepeticion] = useState('ninguna');
 
 
@@ -45,7 +45,8 @@ function useTasks() {
     const dd = String(hoy.getDate()).padStart(2, '0');
     return `${yyyy}-${mm}-${dd}`;
   }
-
+  //estado de fecha donde finaliza la tarea
+  const [fechaVencimiento, setFechaVencimiento] = useState(fechaHoy());
 
   //Importamos los estados necesarios de listas
   const { lista, setLista, editarLista, setEditarLista } = useListsContext();
